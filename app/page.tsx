@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import "../styles/globals.css";
+
+const HomePage = () => {
+  return <div>HomePage</div>;
 };
 
-export default page;
+export default HomePage;
