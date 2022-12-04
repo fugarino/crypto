@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.menuBtn {
+  width: 27px;
+  height: 27px;
+  stroke-width: 2.2;
+  color: #797979;
+}
