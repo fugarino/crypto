@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import Menu from "./Menu";
+import Menu from "./menu/Menu";
 
 const Navbar = () => {
   return (
-    <nav className="w-16 bg-white border-r-[1px] border-[#E0E0E0]">
-      <div className="flex items-center justify-center h-16">
-        <Link href="/">
-          <Image src="/L.svg" height={25} width={25} alt="logo" />
+    <nav className="h-14 sm:w-14 sm:h-screen border-t border-r border-gray-200 bg-white">
+      <div className="hidden sm:flex justify-center items-center w-full h-14 relative -top-[1.5px] -right-[0.5px]">
+        <Link href="/" className="hidden sm:flex">
+          <Image src="/L.svg" height={20} width={20} alt="logo" />
         </Link>
       </div>
       <Menu />

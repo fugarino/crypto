@@ -1,5 +1,6 @@
 import Header from "../components/navigation/Header";
 import Navbar from "../components/navigation/Navbar";
+import "../styles/globals.css";
 
 export default function RootLayout({
   children,
@@ -10,11 +11,13 @@ export default function RootLayout({
     <html>
       <head />
       <body>
-        <div className="flex h-screen w-screen bg-[#F4F4F4]">
+        <div className="flex flex-col-reverse sm:flex-row">
           <Navbar />
-          <div className="w-[calc(100%-4rem)]">
+          <div>
             <Header />
-            <main className="mx-8 my-6">{children}</main>
+            <main className="h-[calc(100vh-113px)] sm:h-[calc(100vh-56px)] pt-4 px-6 bg-[#f4f4f4]">
+              {children}
+            </main>
           </div>
         </div>
       </body>

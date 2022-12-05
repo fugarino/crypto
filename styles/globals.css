@@ -2,9 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-.menuBtn {
-  width: 27px;
-  height: 27px;
-  stroke-width: 2.2;
-  color: #797979;
+@layer components {
+  .menuIcon {
+    @apply w-[22px] h-[22px] text-gray-500;
+  }
+  .menuIconAlt {
+    @apply stroke-gray-500 fill-gray-500;
+  }
+  .menuIconAlt1 {
+    @apply stroke-gray-500;
+  }
+  button:hover .menuIcon {
+    @apply text-black;
+  }
+  button:hover .menuIconAlt {
+    @apply stroke-black fill-black;
+  }
+  button:hover .menuIconAlt1 {
+    @apply stroke-black;
+  }
 }
