@@ -21,4 +21,13 @@
   button:hover .menuIconAlt1 {
     @apply stroke-black;
   }
+  .active .menuIcon {
+    @apply text-black;
+  }
+  .active .menuIconAlt {
+    @apply stroke-black fill-black;
+  }
+  .active .menuIconAlt1 {
+    @apply stroke-black;
+  }
 }

@@ -12,19 +12,19 @@ const Menu = () => {
     <div className="flex flex-col items-center justify-between h-[3.5rem] sm:h-[calc(100%-3.5rem)]">
       <div className="w-full h-full sm:h-[70%] sm:min-h-[320px] sm:max-h-[650px] flex items-center justify-center">
         <menu
-          className="w-full px-6 sm:px-0 sm:h-[70%] sm:min-h-[300px] sm:max-h-[350px]
+          className="w-full px-10 sm:px-0 sm:h-[70%] sm:min-h-[300px] sm:max-h-[350px]
           flex sm:flex-col items-center justify-between"
         >
-          <MenuBtn url="/">
+          <MenuBtn url="/" text="Home">
             <HomeIcon className="menuIcon" />
           </MenuBtn>
-          <MenuBtn url="/coins">
+          <MenuBtn url="/coins" text="Coins">
             <CoinIcon />
           </MenuBtn>
-          <MenuBtn url="/forum">
+          <MenuBtn url="/forum" text="Forum">
             <ChatAlt2Icon className="menuIcon" />
           </MenuBtn>
-          <MenuBtn url="/favorites">
+          <MenuBtn url="/favorites" text="Favorites">
             <BookmarkIcon className="menuIcon" />
           </MenuBtn>
         </menu>
