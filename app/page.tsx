@@ -13,23 +13,6 @@ const HomePage = () => {
       <div onClick={logout} className="cursor-pointer">
         sign out
       </div>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      {/* <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1>
-      <h1 className="text-[5rem]">Hello world</h1> */}
     </main>
   );
 };

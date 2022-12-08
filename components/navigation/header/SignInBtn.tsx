@@ -5,7 +5,8 @@ const SignInBtn = () => {
     <div className="w-[10rem] flex items-center justify-center">
       <Link
         href="/signin"
-        className="bg-red-300 hover:bg-red-400 px-8 py-2 rounded-md text-white"
+        className="border-2 border-slate-400 hover:border-slate-500
+         px-8 py-2 rounded-md text-slate-500 font-semibold transition-all duration-200 ease-out"
       >
         Sign in
       </Link>
