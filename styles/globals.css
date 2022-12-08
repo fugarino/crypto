@@ -31,3 +31,15 @@
     @apply stroke-black;
   }
 }
+
+body {
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
