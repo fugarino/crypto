@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import AuthProviderButton from "../AuthProviderButton";
@@ -17,7 +18,9 @@ const SignUpForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { signup }: any = useAuth();
+
+  const { signup, loginWithGoogle }: any = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +52,17 @@ const SignUpForm = () => {
     }));
   };
 
-  const handleGoogleSignup = async () => {};
+  const handleGoogleSignup = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await loginWithGoogle();
+      router.push("/");
+    } catch {
+      setError("Unable to signin with google.");
+    }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -87,6 +100,7 @@ const SignUpForm = () => {
       </FormLayout>
       <AuthProviderButton
         providerName="Google"
+        disabled={loading}
         handleSignIn={handleGoogleSignup}
       >
         <GoogleIcon />

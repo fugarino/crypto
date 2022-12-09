@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import AuthProviderButton from "../AuthProviderButton";
@@ -10,13 +11,15 @@ import LightInputField from "./LightInputField";
 import SubmitFormBtn from "./SubmitFormBtn";
 
 const SignInForm = () => {
-  const [signInForm, setVal] = useState({
+  const [signInForm, setSignInForm] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signin }: any = useAuth();
+
+  const { signin, loginWithGoogle, forgotPassword }: any = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,17 +32,43 @@ const SignInForm = () => {
     } finally {
       setLoading(false);
     }
-    setVal((prev) => ({
+    setSignInForm((prev) => ({
       ...prev,
       password: "",
     }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVal((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setSignInForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleGoogleSignin = async () => {};
+  const handleGoogleSignin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await loginWithGoogle();
+      router.push("/");
+    } catch {
+      setError("Unable to signin with google.");
+    }
+    setLoading(false);
+  };
+
+  const handleForgotPassword = async () => {
+    setError("");
+    setLoading(true);
+    if (signInForm.email.length < 1 || !signInForm.email.includes("@")) {
+      setLoading(false);
+      return setError("Please enter the email used to sign in.");
+    }
+    try {
+      await forgotPassword(signInForm.email);
+      router.push(`/email/password?email=${signInForm.email}`);
+    } catch {
+      setError("Unable to send reset email.");
+    }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -65,10 +94,21 @@ const SignInForm = () => {
           value={signInForm.password}
           onChange={handleChange}
         />
+        <div className="flex justify-end mb-4">
+          <button
+            className="font-medium"
+            type="button"
+            disabled={loading}
+            onClick={handleForgotPassword}
+          >
+            Forgot password?
+          </button>
+        </div>
         <SubmitFormBtn disabled={loading} text="Sign in" />
       </FormLayout>
       <AuthProviderButton
         providerName="Google"
+        disabled={loading}
         handleSignIn={handleGoogleSignin}
       >
         <GoogleIcon />
