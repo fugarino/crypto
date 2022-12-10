@@ -1,9 +1,11 @@
 "use client";
 
+import { sendEmailVerification } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
+import { auth } from "../../../firebase";
 import AuthProviderButton from "../AuthProviderButton";
 import GoogleIcon from "../GoogleIcon";
 import FormLayout from "./FormLayout";
@@ -19,7 +21,7 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { signup, loginWithGoogle }: any = useAuth();
+  const { loginWithGoogle, signup }: any = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,19 +32,18 @@ const SignUpForm = () => {
     if (signUpForm.password !== signUpForm.confirmPassword) {
       return setError("Password and Confirm Password do not match!");
     }
+    setError("");
+    setLoading(true);
     try {
-      setError("");
-      setLoading(true);
       await signup(signUpForm.email, signUpForm.password);
-      setLoading(false);
+      router.push(`/email/verify?email=${signUpForm.email}`);
+      await sendEmailVerification(auth.currentUser, {
+        url: "http://localhost:3000",
+      });
     } catch {
       setError("Unable to signup");
     }
-    setSignUpForm({
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    setLoading(false);
   };
 
   const handleCredentialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
