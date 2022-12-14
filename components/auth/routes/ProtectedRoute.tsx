@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
 interface IProps {
@@ -9,13 +10,19 @@ interface IProps {
 
 const ProtectedRoute = ({ children }: IProps) => {
   const { currentUser }: any = useAuth();
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  if (currentUser && currentUser.emailVerified) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (currentUser && currentUser.emailVerified) {
+      setLoading(true);
+      router.push("/");
+    } else {
+      setLoading(false);
+    }
+  }, [router, currentUser]);
 
-  if (currentUser && currentUser.emailVerified) {
+  if (loading) {
     return (
       <div className="fixed top-0 left-0 h-screen w-screen flex justify-center items-center bg-[#f4f4f4]">
         <picture>
@@ -23,9 +30,9 @@ const ProtectedRoute = ({ children }: IProps) => {
         </picture>
       </div>
     );
+  } else {
+    return <div>{children}</div>;
   }
-
-  return <div>{children}</div>;
 };
 
 export default ProtectedRoute;
