@@ -15,7 +15,7 @@ const Header = () => {
           <Image src="/L.svg" height={20} width={20} alt="logo" />
         </Link>
       </div>
-      {currentUser ? <UserBtns /> : <SignInBtn />}
+      {currentUser && currentUser.emailVerified ? <UserBtns /> : <SignInBtn />}
     </header>
   );
 };

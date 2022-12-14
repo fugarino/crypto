@@ -1,4 +1,5 @@
 import { BellIcon } from "@heroicons/react/outline";
+import ProfileBtn from "./ProfileBtn";
 
 const UserBtns = () => {
   return (
@@ -6,7 +7,7 @@ const UserBtns = () => {
       <button>
         <BellIcon className="h-5 w-5 text-gray-500" />
       </button>
-      <div className="rounded-full w-8 h-8 bg-red-400"></div>
+      <ProfileBtn />
     </div>
   );
 };

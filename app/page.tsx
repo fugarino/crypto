@@ -13,7 +13,6 @@ const HomePage = () => {
       <div onClick={logout} className="cursor-pointer">
         sign out
       </div>
-      <Link href="/email/password">email</Link>
     </main>
   );
 };
