@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../../contexts/AuthContext";
 import AuthProviderButton from "../AuthProviderButton";
 import GoogleIcon from "../GoogleIcon";
 import FormLayout from "./FormLayout";

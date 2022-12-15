@@ -1,10 +1,7 @@
-// import Header from "../components/navigation/header/Header";
-// import Navbar from "../components/navigation/navbar/Navbar";
-// import { AuthProvider } from "../contexts/AuthContext";
+import { AuthProvider } from "../../contexts/AuthContext";
 import Header from "../components/navigation/header/Header";
 import Navbar from "../components/navigation/navbar/Navbar";
-import { AuthProvider } from "../contexts/AuthContext";
-import "../styles/globals.css";
+import "./globals.css";
 
 export default function RootLayout({
   children,

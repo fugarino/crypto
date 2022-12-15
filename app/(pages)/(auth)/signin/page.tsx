@@ -1,6 +1,6 @@
-import SignInForm from "../../components/auth/forms/SignInForm";
-import ProtectedRoute from "../../components/auth/routes/ProtectedRoute";
-import FormCard from "../../components/cards/FormCard";
+import SignInForm from "../../../components/auth/forms/SignInForm";
+import ProtectedRoute from "../../../components/auth/routes/ProtectedRoute";
+import FormCard from "../../../components/cards/FormCard";
 
 const SignInPage = () => {
   return (

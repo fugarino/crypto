@@ -2,7 +2,7 @@
 
 import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../../contexts/AuthContext";
 import ProfileEditForm from "./ProfileEditForm";
 
 const ProfileCard = () => {

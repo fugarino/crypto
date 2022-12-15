@@ -1,6 +1,6 @@
-import SignUpForm from "../../components/auth/forms/SignUpForm";
-import ProtectedRoute from "../../components/auth/routes/ProtectedRoute";
-import FormCard from "../../components/cards/FormCard";
+import SignUpForm from "../../../components/auth/forms/SignUpForm";
+import ProtectedRoute from "../../../components/auth/routes/ProtectedRoute";
+import FormCard from "../../../components/cards/FormCard";
 
 const SignUpPage = () => {
   return (

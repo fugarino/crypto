@@ -1,8 +1,8 @@
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
-import { storage } from "../../../firebase";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { storage } from "../../../../firebase";
 import LightInputField from "../../auth/forms/LightInputField";
 
 interface IProfileEditForm {
