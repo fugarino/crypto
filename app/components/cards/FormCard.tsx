@@ -6,7 +6,7 @@ interface ILargeCardProps {
 
 const FormCard = ({ children }: ILargeCardProps) => {
   return (
-    <section className="bg-white p-4 rounded-lg shadow-md h-full max-w-[1600px] max-h-[1000px] min-h-[515px] mx-auto">
+    <section className="bg-white p-4 rounded-lg shadow-md h-full max-w-[1400px] max-h-[1000px] min-h-[515px] mx-auto">
       <div className="flex h-full max-h-[1000px]">
         <aside className="relative lg:w-1/2 p-2 hidden lg:flex items-center justify-center pointer-events-none">
           <div className="absolute">
