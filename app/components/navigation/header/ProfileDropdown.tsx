@@ -37,7 +37,7 @@ const ProfileDropDown = ({
   return (
     <div
       ref={ref}
-      className={`absolute top-[61px] right-[10px] w-80 bg-white shadow-md overflow-hidden rounded-md`}
+      className={`absolute z-10 top-[61px] right-[20px] w-80 bg-white shadow-md overflow-hidden rounded-md`}
     >
       <ProfileCard />
     </div>
