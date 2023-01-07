@@ -34,8 +34,8 @@ const MenuBtn = ({ url, text, children }: IProps) => {
           onClick={() => setShowLabel(false)}
           className={`
             relative z-10 flex items-center justify-center w-10 h-10 rounded-[5px]
-            hover:bg-gray-200 transition-all ease-out active:translate-y-1
-            ${pathname == url && "active bg-gray-200"}
+            hover:bg-[#cbc1b1] transition-all ease-out active:translate-y-1
+            ${pathname == url && "active bg-[#cbc1b1]"}
           `}
         >
           {children}

@@ -9,13 +9,13 @@ const SignInBtn = () => {
   const pathname = usePathname();
 
   return (
-    <div className="w-[10rem] flex items-center justify-center">
+    <div className="flex">
       <Link
         href="/signin"
-        className={`border-2 border-slate-400 px-8 py-2 rounded-md
-        text-slate-500 font-semibold transition-all duration-200 ease-out
+        className={`border-2 border-slate-500 px-8 py-2 rounded-md
+        text-slate-600 font-semibold transition-all duration-200 ease-out
          ${
-           isBtnStyled && pathname !== "/signin" ? "border-slate-500" : ""
+           isBtnStyled && pathname !== "/signin" ? "border-slate-600" : ""
          } transition-all duration-300 ease-out`}
         onMouseEnter={() => setIsBtnStyled(true)}
         onMouseLeave={() => setIsBtnStyled(false)}

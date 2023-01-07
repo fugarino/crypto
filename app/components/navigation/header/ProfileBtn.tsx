@@ -25,9 +25,9 @@ const ProfileButton = () => {
   };
 
   return (
-    <div className="w-9 h-9 flex items-center justify-center">
+    <div className="w-[45px] h-[45px] flex items-center justify-center">
       <button
-        className={`w-full h-full rounded-full border-[1px] flex items-center justify-center active:w-[32px] active:h-[32px] transition-all duration-200 ease-out ${
+        className={`w-full h-full rounded-full border-[1px] flex items-center justify-center active:w-[40px] active:h-[40px] transition-all duration-200 ease-out ${
           darkProfileBorder ? "border-gray-400" : "border-gray-300"
         }`}
         onMouseEnter={onProfileMouseEnter}
@@ -42,7 +42,7 @@ const ProfileButton = () => {
             alt="profile"
             referrerPolicy="no-referrer"
             id="profile"
-            className="w-[32px] h-[32px] rounded-full object-cover"
+            className="w-[40px] h-[40px] rounded-full object-cover"
           />
         </picture>
       </button>
