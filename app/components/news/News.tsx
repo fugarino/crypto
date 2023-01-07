@@ -74,7 +74,7 @@ const News = () => {
   // const { data } = await getData();
   // console.log(data);
   return (
-    <section className={`${styles.container}`}>
+    <section className={`${styles.container} px-12`}>
       {dummyData.map((article) => (
         <NewsArticle
           key={article.title}
