@@ -66,6 +66,14 @@ body {
   align-items: center;
 }
 
-.idk::-webkit-scrollbar-thumb {
+/* .idk::-webkit-scrollbar-thumb {
   background-color: #edebe9;
+} */
+
+/* firefox */
+.idk {
+  scrollbar-width: 0;
+}
+.idk::-webkit-scrollbar-thumb {
+  visibility: hidden;
 }
