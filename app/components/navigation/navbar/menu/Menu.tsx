@@ -15,14 +15,19 @@ const Menu = () => {
   const path = usePathname();
 
   return (
-    <menu className="flex relative top-[8px] ml-[10rem] space-x-16 text-black text-sm">
+    <menu className="flex ml-[5rem] space-x-10">
       {links.map((link) => (
         <li key={link.href}>
-          <Link className="relative" href={link.href}>
+          <Link
+            className={`relative top-1 ${
+              link.href === path ? "text-black" : "text-[#696969]"
+            } font-medium hover:text-black transition-all duration-300 ease-out`}
+            href={link.href}
+          >
             {link.href === path && (
               <motion.span
                 layoutId="underline"
-                className="absolute left-0 top-full block h-[1.5px] w-full bg-black"
+                className="absolute left-0 top-full block h-[2px] w-full bg-black"
               />
             )}
             {link.label}

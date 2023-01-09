@@ -47,7 +47,7 @@ const TrendingCoin = ({
       <section>
         <span
           className={
-            price_change_percentage_24h < 0 ? "text-red-500" : "text-green-500"
+            price_change_percentage_24h < 0 ? "text-red-700" : "text-green-700"
           }
         >
           {price_change_percentage_24h < 0

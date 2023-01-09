@@ -1,5 +1,7 @@
+import CoinsTable from "../../components/coins/table/CoinsTable";
+
 const CoinsPage = () => {
-  return <div>CoinsPage</div>;
+  return <CoinsTable />;
 };
 
 export default CoinsPage;
