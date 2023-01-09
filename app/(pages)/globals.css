@@ -77,3 +77,12 @@ body {
 .idk::-webkit-scrollbar-thumb {
   visibility: hidden;
 }
+
+.testing button {
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.testing:hover button {
+  opacity: 1;
+}

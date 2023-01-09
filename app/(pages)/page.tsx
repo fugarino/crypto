@@ -17,11 +17,6 @@ const HomePage = () => {
       </Suspense>
       {/* @ts-ignore */}
       <TrendingCoins />
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
     </div>
   );
 };
