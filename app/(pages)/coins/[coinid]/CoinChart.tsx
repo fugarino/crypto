@@ -39,6 +39,7 @@ const CoinChart = ({ id }: any) => {
       setHistoricData(data.prices);
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [days]);
 
   console.log(id);
@@ -104,6 +105,7 @@ const CoinChart = ({ id }: any) => {
           />
         </div>
       )}
+      <button onClick={() => setDays(30)}>30 days</button>
     </div>
   );
 };
