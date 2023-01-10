@@ -51,7 +51,7 @@ const TrendingCoin = ({
           }
         >
           {price_change_percentage_24h < 0
-            ? "-" + price_change_percentage_24h
+            ? price_change_percentage_24h
             : "+" + price_change_percentage_24h}
           %
         </span>
