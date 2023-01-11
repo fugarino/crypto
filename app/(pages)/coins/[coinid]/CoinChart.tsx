@@ -35,14 +35,12 @@ const CoinChart = ({ id }: any) => {
         `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}`
       );
       const data = await res.json();
-      console.log(data.prices);
       setHistoricData(data.prices);
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [days]);
 
-  console.log(id);
   return (
     <div className="flex justify-center">
       {historicData && (

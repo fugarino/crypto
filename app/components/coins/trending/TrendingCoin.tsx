@@ -1,20 +1,28 @@
+"use client";
+
+import { useTrendingCoins } from "../../../../contexts/TrendingCoinsContext";
+
 interface ITrendingCoinProps {
   i: number;
   margin: number;
   name: string;
   image: string;
+  id: string;
   current_price: number;
   price_change_percentage_24h: number;
 }
 
 const TrendingCoin = ({
   i,
+  id,
   margin,
   name,
   image,
   current_price,
   price_change_percentage_24h,
 }: ITrendingCoinProps) => {
+  const { handleCoinClick }: any = useTrendingCoins();
+
   return (
     <li
       style={{
@@ -22,6 +30,7 @@ const TrendingCoin = ({
         marginRight: i === 9 ? margin : 12,
       }}
       className="bg-white flex flex-col justify-between w-[240px] rounded-lg shadow-md shrink-0 mb-2 p-6"
+      onClick={() => handleCoinClick(id.toLowerCase(), current_price)}
     >
       <header>
         <div className="flex justify-between">

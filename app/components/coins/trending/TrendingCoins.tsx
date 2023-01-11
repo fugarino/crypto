@@ -1,3 +1,4 @@
+import { TrendingCoinsProvider } from "../../../../contexts/TrendingCoinsContext";
 import TrendingCoinsList from "./TrendingCoinsList";
 
 const fetchData = async (currency: string) => {
@@ -10,7 +11,11 @@ const fetchData = async (currency: string) => {
 
 const TrendingCoins = async () => {
   const data: any[] = await fetchData("USD");
-  return <TrendingCoinsList data={data} />;
+  return (
+    <TrendingCoinsProvider>
+      <TrendingCoinsList data={data} />
+    </TrendingCoinsProvider>
+  );
 };
 
 export default TrendingCoins;
