@@ -29,9 +29,9 @@ const TrendingCoin = ({
         marginLeft: i === 0 ? margin : 0,
         marginRight: i === 9 ? margin : 12,
       }}
-      className="bg-white flex flex-col justify-between w-[240px] rounded-lg shadow-md shrink-0 my-2 p-6
-       cursor-pointer outline-[#dedede] hover:outline hover:outline-[2px] hover:outline-[#dedede]
-	  hover:bg-[#f9f9f9] transition-all duration-150 ease-out"
+      className="bg-white flex flex-col justify-between w-[240px] rounded-lg shadow-md shrink-0 mt-[2px] mb-2 p-6
+       outline-[#dedede] hover:outline hover:outline-[2px] hover:outline-[#dedede]
+	  hover:bg-[#f9f9f9] transition-colors duration-150 ease-out cursor-pointer"
       onClick={() => handleCoinClick(id.toLowerCase(), current_price)}
     >
       <header>

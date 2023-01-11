@@ -44,7 +44,7 @@ const TrendingCoinsList = ({ data }: IProps) => {
         <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
         <ul
           ref={carousel}
-          className="flex h-[256px] overflow-x-auto space-x-4 idk"
+          className="flex h-[250px] overflow-x-auto space-x-4 idk"
         >
           {data.map((coin, i) => (
             <TrendingCoin
