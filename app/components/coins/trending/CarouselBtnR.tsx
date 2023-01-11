@@ -7,7 +7,7 @@ const CarouselBtnR = ({ handleClick }: ICarouselBtnProps) => {
   return (
     <button
       className={`absolute flex items-center justify-center text-white right-12
-	   top-[80px] w-12 h-12 bg-gray-500 rounded-full bg-opacity-25 
+	   top-[95px] w-12 h-12 bg-gray-500 rounded-full bg-opacity-25 
 	   hover:bg-opacity-30 transition-all duration-300 ease-out`}
       onClick={handleClick}
     >
