@@ -13,6 +13,8 @@ interface IProps {
 
 const TrendingCoinsList = ({ data }: IProps) => {
   const [margin, setMargin] = useState(0);
+  const [left, setLeft] = useState(false);
+  const [right, setRight] = useState(true);
   const { currentCoin }: any = useTrendingCoins();
   const carousel: any = useRef();
 
@@ -34,6 +36,18 @@ const TrendingCoinsList = ({ data }: IProps) => {
     carousel.current.scrollBy({ left: -452, behaviour: "smooth" });
   };
 
+  const handleButtons = (e: any) => {
+    carousel.current.firstChild.getBoundingClientRect().x - margin < -1
+      ? setLeft(true)
+      : setLeft(false);
+    carousel.current.lastChild.getBoundingClientRect().right -
+      e.target.clientWidth +
+      margin <
+    1
+      ? setRight(false)
+      : setRight(true);
+  };
+
   return (
     <section className="mt-10">
       <TrendingChart
@@ -41,9 +55,12 @@ const TrendingCoinsList = ({ data }: IProps) => {
         price={currentCoin.price || data[0].current_price}
       />
       <div className="relative testing">
-        <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
+        {left && (
+          <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
+        )}
         <ul
           ref={carousel}
+          onScroll={(e) => handleButtons(e)}
           className="flex h-[250px] overflow-x-auto space-x-4 idk"
         >
           {data.map((coin, i) => (
@@ -59,7 +76,9 @@ const TrendingCoinsList = ({ data }: IProps) => {
             />
           ))}
         </ul>
-        <CarouselBtnR handleClick={handleNextClick} className="right-12" />
+        {right && (
+          <CarouselBtnR handleClick={handleNextClick} className="right-12" />
+        )}
       </div>
     </section>
   );
