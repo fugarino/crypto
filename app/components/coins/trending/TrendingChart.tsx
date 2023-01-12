@@ -75,7 +75,8 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
                     label: "",
                     data: historicData.map((coin) => coin[1]),
                     // borderColor: "#c8bcac",
-                    borderColor: "#ada293",
+                    // borderColor: "#ada293",
+                    borderColor: "#8e8a85",
                   },
                 ],
               }}

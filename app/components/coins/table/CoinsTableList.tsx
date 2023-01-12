@@ -17,16 +17,49 @@ const CoinsTableList = ({ data }: ICoinsTableListProps) => {
   }, [data]);
 
   return (
-    <>
-      <div>
+    <section className="px-12 max-w-[1400px] mx-auto">
+      <header className="mt-1 ml-6">
+        <h1 className="font-bold text-[1.5rem]">Cryptocurrencies</h1>
+        <h2 className="relative -top-2 text-[#67676d]">
+          share your thoughts on the top coins
+        </h2>
+      </header>
+      <div className="flex items-center h-[4rem] px-[2rem] bg-white rounded-lg shadow-md">
+        <div className="flex justify-center w-[5%] text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+        </div>
         <input
           type="text"
           value={search}
-          placeholder="search coins..."
+          placeholder="Search coins..."
+          className="h-full w-[90%] outline-none text-[1rem]"
           onChange={(e) => setSearch(e.target.value)}
         />
+        <span className="text-gray-400 text-sm">/ USD</span>
       </div>
-      <ol>
+      <ul className="flex justify-center space-x-16 text-[#67676d] text-[0.9rem] mt-3">
+        <li className="bg-[#d2d0cd] text-black rounded-[4px] px-4 py-1">
+          Market cap
+        </li>
+        <li className="px-4 py-1">24h Volume</li>
+        <li className="px-4 py-1">Price</li>
+        <li className="px-4 py-1">Biggest Gains</li>
+        <li className="px-4 py-1">Biggest Losses</li>
+      </ul>
+      <ol className="p-8 bg-white mt-4 rounded-lg shadow-md">
         {coinsList
           .filter(
             (coin) =>
@@ -36,7 +69,7 @@ const CoinsTableList = ({ data }: ICoinsTableListProps) => {
           .map((coin) => (
             <li
               key={coin.name}
-              className="flex items-center space-x-6"
+              className="flex items-center justify-between"
               onClick={() => router.push(`/coins/${coin.id}`)}
             >
               <picture>
@@ -53,7 +86,7 @@ const CoinsTableList = ({ data }: ICoinsTableListProps) => {
             </li>
           ))}
       </ol>
-    </>
+    </section>
   );
 };
 
