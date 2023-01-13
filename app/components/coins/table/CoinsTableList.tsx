@@ -9,12 +9,22 @@ interface ICoinsTableListProps {
 
 const CoinsTableList = ({ data }: ICoinsTableListProps) => {
   const [coinsList, setCoinsList] = useState<any[]>([]);
+  const [filter, setFilter] = useState("market_cap");
   const [search, setSearch] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     setCoinsList(data);
   }, [data]);
+
+  const sortList = (a: any, b: any) => {
+    if (filter === "+") {
+      return b.price_change_percentage_24h - a.price_change_percentage_24h;
+    } else if (filter === "-") {
+      return a.price_change_percentage_24h - b.price_change_percentage_24h;
+    }
+    return b[filter] - a[filter];
+  };
 
   return (
     <section className="px-12 max-w-[1400px] mx-auto">
@@ -50,42 +60,100 @@ const CoinsTableList = ({ data }: ICoinsTableListProps) => {
         />
         <span className="text-gray-400 text-sm">/ USD</span>
       </div>
-      <ul className="flex justify-center space-x-16 text-[#67676d] text-[0.9rem] mt-3">
-        <li className="bg-[#d2d0cd] text-black rounded-[4px] px-4 py-1">
+      <ul className="flex justify-center space-x-16 text-[#67676d] text-[0.9rem] mt-4">
+        <li
+          className={`rounded-[4px] cursor-pointer px-4 py-1 ${
+            filter === "market_cap" && "bg-[#e0dddb] text-black"
+          }`}
+          onClick={() => setFilter("market_cap")}
+        >
           Market cap
         </li>
-        <li className="px-4 py-1">24h Volume</li>
-        <li className="px-4 py-1">Price</li>
-        <li className="px-4 py-1">Biggest Gains</li>
-        <li className="px-4 py-1">Biggest Losses</li>
+        <li
+          className={`rounded-[4px] cursor-pointer px-4 py-1 ${
+            filter === "circulating_supply" && "bg-[#e0dddb] text-black"
+          }`}
+          onClick={() => setFilter("circulating_supply")}
+        >
+          Supply
+        </li>
+        <li
+          className={`rounded-[4px] cursor-pointer px-4 py-1 ${
+            filter === "current_price" && "bg-[#e0dddb] text-black"
+          }`}
+          onClick={() => setFilter("current_price")}
+        >
+          Price
+        </li>
+        <li
+          className={`rounded-[4px] cursor-pointer px-4 py-1 ${
+            filter === "+" && "bg-[#e0dddb] text-black"
+          }`}
+          onClick={() => setFilter("+")}
+        >
+          + 24h
+        </li>
+        <li
+          className={`rounded-[4px] cursor-pointer px-4 py-1 ${
+            filter === "-" && "bg-[#e0dddb] text-black"
+          }`}
+          onClick={() => setFilter("-")}
+        >
+          - 24h
+        </li>
       </ul>
-      <ol className="p-8 bg-white mt-4 rounded-lg shadow-md">
-        {coinsList
-          .filter(
-            (coin) =>
-              coin.name.toLowerCase().includes(search.toLowerCase()) ||
-              coin.symbol.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((coin) => (
-            <li
-              key={coin.name}
-              className="flex items-center justify-between"
-              onClick={() => router.push(`/coins/${coin.id}`)}
-            >
-              <picture>
-                <img src={coin.image} alt={coin.name} className="h-10 w-10" />
-              </picture>
-              <span>{coin.name}</span>
-              <span>${coin.current_price}</span>
-              <span>
-                {coin.price_change_percentage_24h > 0
-                  ? "+" + coin.price_change_percentage_24h
-                  : coin.price_change_percentage_24h}
-              </span>
-              <span>{coin.market_cap}</span>
-            </li>
-          ))}
-      </ol>
+      <div className="flex mt-10">
+        <ol className="w-[80%] space-y-1 pr-10">
+          {[...coinsList]
+            .sort((a, b) => sortList(a, b))
+            .filter(
+              (coin) =>
+                coin.name.toLowerCase().includes(search.toLowerCase()) ||
+                coin.symbol.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((coin) => (
+              <li
+                key={coin.name}
+                className="grid grid-cols-4 cursor-pointer hover:bg-[#e0dddb]
+                rounded-md px-1 py-1"
+                onClick={() => router.push(`/coins/${coin.id}`)}
+              >
+                <div className="flex items-center">
+                  <picture>
+                    <img
+                      src={coin.image}
+                      alt={coin.name}
+                      className="h-10 w-10"
+                    />
+                  </picture>
+                  <span className="ml-4">{coin.name}</span>
+                </div>
+                <span className="flex items-center justify-end">
+                  ${coin.current_price}
+                </span>
+                <span className="flex items-center justify-end">
+                  {coin.price_change_percentage_24h > 0
+                    ? "+" + coin.price_change_percentage_24h
+                    : coin.price_change_percentage_24h}
+                  %
+                </span>
+                <span className="flex items-center justify-end">
+                  {coin.market_cap}
+                </span>
+              </li>
+            ))}
+        </ol>
+        <div className="flex">
+          <div className="bg-[#D0CAC5] w-[2px] mt-10 max-h-[1008px]"></div>
+          <div className="ml-10">
+            <h3 className="font-bold text-[1.4rem] mb-2">Favorites</h3>
+            <ul className="space-y-4">
+              <li className="bg-white h-[240px] w-[240px] rounded-lg shadow-md"></li>
+              <li className="bg-white h-[240px] w-[240px] rounded-lg shadow-md"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
