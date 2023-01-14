@@ -17,7 +17,7 @@ const HomePage = () => {
       </Suspense>
       {/* @ts-ignore */}
       <TrendingCoins />
-      <div className="px-12 max-w-[1400px] mx-auto mt-6">
+      <div className="px-12 max-w-[1400px] mx-auto mt-6 mb-12">
         <h2 className="font-bold text-[1.4rem] ml-4 mb-1">
           <span className="text-[#67676d]">Stay</span>
           <span className="ml-[5px]">Connected</span>
