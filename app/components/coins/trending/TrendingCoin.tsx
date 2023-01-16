@@ -1,7 +1,5 @@
 "use client";
 
-import { useTrendingCoins } from "../../../../contexts/TrendingCoinsContext";
-
 interface ITrendingCoinProps {
   i: number;
   margin: number;
@@ -10,6 +8,8 @@ interface ITrendingCoinProps {
   id: string;
   current_price: number;
   price_change_percentage_24h: number;
+  // eslint-disable-next-line no-unused-vars
+  handleCoinClick: (arg0: string, arg1: number) => void;
 }
 
 const TrendingCoin = ({
@@ -20,9 +20,8 @@ const TrendingCoin = ({
   image,
   current_price,
   price_change_percentage_24h,
+  handleCoinClick,
 }: ITrendingCoinProps) => {
-  const { handleCoinClick }: any = useTrendingCoins();
-
   return (
     <li
       style={{

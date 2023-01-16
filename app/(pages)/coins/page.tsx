@@ -1,8 +1,8 @@
-import CoinsTable from "../../components/coins/table/CoinsTable";
+import CoinsTableList from "../../components/coins/table/CoinsTableList";
 
 const CoinsPage = () => {
   /* @ts-ignore */
-  return <CoinsTable />;
+  return <CoinsTableList />;
 };
 
 export default CoinsPage;

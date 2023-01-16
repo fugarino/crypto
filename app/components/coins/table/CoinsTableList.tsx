@@ -1,23 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 
-interface ICoinsTableListProps {
-  data: any[];
-}
-
-const CoinsTableList = ({ data }: ICoinsTableListProps) => {
+const CoinsTableList = () => {
   // const [coinsList, setCoinsList] = useState<any[]>([]);
-  const { coins, setCoins }: any = useFavoriteCoins();
+  const { coins }: any = useFavoriteCoins();
   const [filter, setFilter] = useState("market_cap");
   const [search, setSearch] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    setCoins(data);
-  }, [data]);
+  // useEffect(() => {
+  //   setCoins(data);
+  // }, [data]);
 
   const sortList = (a: any, b: any) => {
     if (filter === "+") {

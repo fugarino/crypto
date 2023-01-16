@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import TrendingCoins from "../components/coins/trending/TrendingCoins";
+import TrendingCoinsList from "../components/coins/trending/TrendingCoinsList";
 import News from "../components/news/News";
 import "./globals.css";
 
@@ -15,8 +15,7 @@ const HomePage = () => {
       <Suspense fallback={<p>Loading news...</p>}>
         <News />
       </Suspense>
-      {/* @ts-ignore */}
-      <TrendingCoins />
+      <TrendingCoinsList />
       <div className="px-12 max-w-[1400px] mx-auto mt-6 mb-12">
         <h2 className="font-bold text-[1.4rem] ml-4 mb-1">
           <span className="text-[#67676d]">Stay</span>

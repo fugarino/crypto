@@ -26,7 +26,7 @@ ChartJS.register(
 );
 
 interface TrendingChartProps {
-  id: string;
+  id: any;
   price: number;
 }
 

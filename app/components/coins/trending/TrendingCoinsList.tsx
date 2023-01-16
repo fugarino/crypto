@@ -1,22 +1,28 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { useTrendingCoins } from "../../../../contexts/TrendingCoinsContext";
+import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 import CarouselBtnL from "./CarouselBtnL";
 import CarouselBtnR from "./CarouselBtnR";
 import TrendingChart from "./TrendingChart";
 import TrendingCoin from "./TrendingCoin";
 
-interface IProps {
-  data: any[];
-}
-
-const TrendingCoinsList = ({ data }: IProps) => {
+const TrendingCoinsList = () => {
   const [margin, setMargin] = useState(0);
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(true);
-  const { currentCoin }: any = useTrendingCoins();
+  const { coins }: any = useFavoriteCoins();
   const carousel: any = useRef();
+  const [displayCoin, setDisplayCoin] = useState<any>({
+    coinId: "",
+    coinPrice: 0,
+  });
+
+  const trendingCoins = [...coins]
+    .sort(
+      (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
+    )
+    .slice(0, 10);
 
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -48,38 +54,53 @@ const TrendingCoinsList = ({ data }: IProps) => {
       : setRight(true);
   };
 
+  const handleCoinClick = (coinId: string, coinPrice: number) => {
+    setDisplayCoin({
+      coinId,
+      coinPrice,
+    });
+  };
+
   return (
     <section className="mt-10">
-      <TrendingChart
-        id={currentCoin.id || data[0].id}
-        price={currentCoin.price || data[0].current_price}
-      />
-      <div className="relative testing">
-        {left && (
-          <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
-        )}
-        <ul
-          ref={carousel}
-          onScroll={(e) => handleButtons(e)}
-          className="flex h-[250px] overflow-x-auto space-x-4 idk"
-        >
-          {data.map((coin, i) => (
-            <TrendingCoin
-              key={coin.name}
-              i={i}
-              id={coin.id}
-              margin={margin}
-              name={coin.name}
-              image={coin.image}
-              current_price={coin.current_price}
-              price_change_percentage_24h={coin.price_change_percentage_24h}
-            />
-          ))}
-        </ul>
-        {right && (
-          <CarouselBtnR handleClick={handleNextClick} className="right-12" />
-        )}
-      </div>
+      {coins.length > 1 && (
+        <>
+          <TrendingChart
+            id={displayCoin.coinId || trendingCoins[0].id}
+            price={displayCoin.coinPrice || trendingCoins[0].current_price}
+          />
+          <div className="relative testing">
+            {left && (
+              <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
+            )}
+            <ul
+              ref={carousel}
+              onScroll={(e) => handleButtons(e)}
+              className="flex h-[250px] overflow-x-auto space-x-4 idk"
+            >
+              {trendingCoins.map((coin: any, i: any) => (
+                <TrendingCoin
+                  key={coin.name}
+                  i={i}
+                  id={coin.id}
+                  margin={margin}
+                  name={coin.name}
+                  image={coin.image}
+                  current_price={coin.current_price}
+                  price_change_percentage_24h={coin.price_change_percentage_24h}
+                  handleCoinClick={handleCoinClick}
+                />
+              ))}
+            </ul>
+            {right && (
+              <CarouselBtnR
+                handleClick={handleNextClick}
+                className="right-12"
+              />
+            )}
+          </div>
+        </>
+      )}
     </section>
   );
 };
