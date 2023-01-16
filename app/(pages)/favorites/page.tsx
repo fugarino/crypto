@@ -1,3 +1,4 @@
+import FavoriteCoins from "./FavoriteCoins";
 import styles from "./Favorites.module.css";
 
 const FavoritesPage = () => {
@@ -39,6 +40,7 @@ const FavoritesPage = () => {
           ></li>
         </ul>
       </div>
+      <FavoriteCoins />
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AuthProvider } from "../../contexts/AuthContext";
+import { FavoriteCoinsProvider } from "../../contexts/FavoritesContext";
 import Profile from "../components/auth/Profile";
 import Menu from "../components/navigation/navbar/menu/Menu";
 import "./globals.css";
@@ -36,7 +37,9 @@ export default function RootLayout({
                 <Profile />
               </div>
             </nav>
-            <main className="w-full">{children}</main>
+            <FavoriteCoinsProvider>
+              <main className="w-full">{children}</main>
+            </FavoriteCoinsProvider>
           </div>
         </AuthProvider>
       </body>

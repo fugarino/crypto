@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import ReactHtmlParser from "react-html-parser";
 import styles from "./CoinInfo.module.css";
+import FavoritesBtn from "./FavoritesBtn";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -65,6 +66,7 @@ const CoinInfo = ({ id }: CoinInfoProps) => {
 
   return (
     <div className="p-10 h-full">
+      <FavoritesBtn coin={coin} />
       {coin && (
         <div className="flex flex-col justify-between h-full">
           <div className="flex justify-between">

@@ -2,19 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 
 interface ICoinsTableListProps {
   data: any[];
 }
 
 const CoinsTableList = ({ data }: ICoinsTableListProps) => {
-  const [coinsList, setCoinsList] = useState<any[]>([]);
+  // const [coinsList, setCoinsList] = useState<any[]>([]);
+  const { coins, setCoins }: any = useFavoriteCoins();
   const [filter, setFilter] = useState("market_cap");
   const [search, setSearch] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    setCoinsList(data);
+    setCoins(data);
   }, [data]);
 
   const sortList = (a: any, b: any) => {
@@ -104,7 +106,7 @@ const CoinsTableList = ({ data }: ICoinsTableListProps) => {
       </ul>
       <div className="flex mt-10">
         <ol className="w-[80%] space-y-1 pr-10">
-          {[...coinsList]
+          {[...coins]
             .sort((a, b) => sortList(a, b))
             .filter(
               (coin) =>
