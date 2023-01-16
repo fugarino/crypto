@@ -1,5 +1,4 @@
 import FavoriteCoins from "./FavoriteCoins";
-import styles from "./Favorites.module.css";
 
 const FavoritesPage = () => {
   return (
@@ -16,31 +15,8 @@ const FavoritesPage = () => {
             <img src="/Edit_filledit.svg" alt="edit" />
           </picture>
         </div>
-        <ul className="grid grid-cols-5 gap-4">
-          <li className="bg-white h-[240px] rounded-lg shadow-md"></li>
-          <li className="bg-white h-[240px] rounded-lg shadow-md"></li>
-          <li className="bg-white h-[240px] rounded-lg shadow-md"></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-          <li
-            className={`bg-white h-[240px] rounded-lg ${styles.gradient}`}
-          ></li>
-        </ul>
+        <FavoriteCoins />
       </div>
-      <FavoriteCoins />
     </section>
   );
 };
