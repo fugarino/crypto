@@ -86,3 +86,7 @@ body {
 .testing:hover button {
   opacity: 1;
 }
+
+.gradient {
+  background-image: linear-gradient(to top right, #e4e4e4, #edebe9);
+}

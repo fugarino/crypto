@@ -34,9 +34,24 @@ const FavoritesBtn = ({ coin }: any) => {
   };
 
   return (
-    <button onClick={inFavorites ? removeFromFavorites : addToFavorites}>
-      {inFavorites ? "remove from favorites" : "add to favorites"}
-    </button>
+    <>
+      {currentUser && (
+        <button
+          className="absolute -top-7 right-2"
+          onClick={inFavorites ? removeFromFavorites : addToFavorites}
+        >
+          {inFavorites ? (
+            <picture>
+              <img src="/Bookmark_fillyo.svg" alt="remove from favorites" />
+            </picture>
+          ) : (
+            <picture>
+              <img src="/Bookmarkyi.svg" alt="add to favorites" />
+            </picture>
+          )}
+        </button>
+      )}
+    </>
   );
 };
 

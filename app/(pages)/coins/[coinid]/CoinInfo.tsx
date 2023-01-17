@@ -65,7 +65,7 @@ const CoinInfo = ({ id }: CoinInfoProps) => {
   };
 
   return (
-    <div className="p-10 h-full">
+    <div className="relative p-10 h-full">
       <FavoritesBtn coin={coin} />
       {coin && (
         <div className="flex flex-col justify-between h-full">

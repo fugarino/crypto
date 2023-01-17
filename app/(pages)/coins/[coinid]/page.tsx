@@ -19,7 +19,7 @@ const page = async ({ params }: pageProps) => {
         <h2 className="relative -top-2 text-[#67676d]">info</h2>
       </header>
       <div className="flex space-x-12 h-[35rem]">
-        <div className="bg-white w-1/2 rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white w-1/2 rounded-lg shadow-md">
           <CoinInfo id={params.coinid} />
         </div>
         <div className="w-1/2">
