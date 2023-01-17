@@ -90,3 +90,8 @@ body {
 .gradient {
   background-image: linear-gradient(to top right, #e4e4e4, #edebe9);
 }
+
+.shadowProfile {
+  /* box-shadow: 2px 2px 7px 2px #a9a9a9; */
+  box-shadow: 2px 2px 3px 2px #989898;
+}

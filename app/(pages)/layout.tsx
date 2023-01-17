@@ -33,7 +33,7 @@ export default function RootLayout({
                 </Link>
                 <Menu />
               </div>
-              <div>
+              <div className="relative top-[5px]">
                 <Profile />
               </div>
             </nav>

@@ -28,7 +28,7 @@ const ProfileButton = () => {
     <div className="w-[45px] h-[45px] flex items-center justify-center">
       <button
         className={`w-full h-full rounded-full border-[1px] flex items-center justify-center active:w-[40px] active:h-[40px] transition-all duration-200 ease-out ${
-          darkProfileBorder ? "border-gray-400" : "border-gray-300"
+          darkProfileBorder ? "border-gray-500" : "border-gray-400"
         }`}
         onMouseEnter={onProfileMouseEnter}
         onMouseLeave={onProfileMouseLeave}
