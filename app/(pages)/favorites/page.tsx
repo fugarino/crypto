@@ -10,11 +10,6 @@ const FavoritesPage = () => {
         </h2>
       </header>
       <div className="relative">
-        <div className="absolute right-0 -top-8">
-          <picture>
-            <img src="/Edit_filledit.svg" alt="edit" />
-          </picture>
-        </div>
         <FavoriteCoins />
       </div>
     </section>

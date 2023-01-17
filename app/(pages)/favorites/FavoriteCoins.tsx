@@ -1,16 +1,49 @@
 "use client";
 
+import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
 import { useFavoriteCoins } from "../../../contexts/FavoritesContext";
+import { db } from "../../../firebase";
 import styles from "./Favorites.module.css";
 
 const FavoriteCoins = () => {
+  const { currentUser }: any = useAuth();
+  const [edit, setEdit] = useState(false);
   const { coins, favoriteCoins }: any = useFavoriteCoins();
   const router = useRouter();
 
+  const removeFromFavorites = async (id: any) => {
+    const coinRef = doc(db, "watchlist", currentUser.uid);
+    try {
+      await updateDoc(coinRef, {
+        coins: favoriteCoins.filter((watch: any) => watch !== id),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setEdit(false);
+  };
+
   return (
     <div>
-      {coins && favoriteCoins && (
+      <div
+        className={`absolute right-0 -top-10 flex items-center justify-center w-9 h-9
+      rounded-full hover:bg-[#d7d7d7] cursor-pointer`}
+        onClick={() => setEdit((prevState) => !prevState)}
+      >
+        {!edit ? (
+          <picture>
+            <img src="/Edit_filledit.svg" alt="edit" />
+          </picture>
+        ) : (
+          <picture>
+            <img src="/Close_roundx.svg" alt="edit" />
+          </picture>
+        )}
+      </div>
+      {coins && (
         <div>
           <ul className="grid grid-cols-5 gap-y-3 gap-x-4">
             {coins.map((coin: any) => {
@@ -18,11 +51,18 @@ const FavoriteCoins = () => {
                 return (
                   <li
                     key={coin.name}
-                    className="bg-white flex flex-col justify-between h-[225px] rounded-lg shadow-md
-                    shrink-0 mt-[2px] mb-2 p-6 outline-[#dedede] hover:outline hover:outline-[2px]
-                    hover:outline-[#dedede] hover:bg-[#f9f9f9]
-                    transition-colors duration-150 ease-out cursor-pointer"
-                    onClick={() => router.push(`/coins/${coin.id}`)}
+                    className={`relative bg-white flex flex-col justify-between h-[225px] rounded-lg shadow-md
+                    shrink-0 mt-[2px] mb-2 p-6 cursor-pointer hover:outline hover:outline-[2px] ${
+                      !edit
+                        ? "outline-[#dedede] hover:outline-[#dedede] hover:bg-[#f9f9f9]"
+                        : "outline-[#d2a0a0] hover:outline-[#d2a0a0] hover:bg-[#f2e5e5]"
+                    }
+                    transition-colors duration-150 ease-out`}
+                    onClick={() =>
+                      !edit
+                        ? router.push(`/coins/${coin.id}`)
+                        : removeFromFavorites(coin.id)
+                    }
                   >
                     <header>
                       <div className="flex justify-between">
