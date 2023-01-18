@@ -3,7 +3,7 @@
 "use client";
 
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import ReactHtmlParser from "react-html-parser";
 import styles from "./CoinInfo.module.css";
@@ -17,6 +17,10 @@ interface CoinInfoProps {
 
 const CoinInfo = ({ id }: CoinInfoProps) => {
   const [coin, setCoin] = useState<any>();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  });
 
   useEffect(() => {
     const fetchCoinData = async () => {

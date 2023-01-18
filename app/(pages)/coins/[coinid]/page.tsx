@@ -5,7 +5,7 @@ interface pageProps {
   params: { coinid: string };
 }
 
-const page = async ({ params }: pageProps) => {
+const page = ({ params }: pageProps) => {
   const firstCharToUpper = (str: string) => {
     return str[0].toUpperCase() + str.slice(1);
   };

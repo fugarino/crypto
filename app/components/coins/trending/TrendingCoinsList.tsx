@@ -76,7 +76,7 @@ const TrendingCoinsList = () => {
             <ul
               ref={carousel}
               onScroll={(e) => handleButtons(e)}
-              className="flex h-[250px] overflow-x-auto space-x-4 idk"
+              className="flex h-[250px] overflow-x-auto space-x-4 idk scroll-smooth"
             >
               {trendingCoins.map((coin: any, i: any) => (
                 <TrendingCoin
