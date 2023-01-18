@@ -32,10 +32,6 @@
   }
 }
 
-* {
-  scroll-behavior: smooth;
-}
-
 html {
   overflow-x: hidden;
 }
@@ -50,7 +46,7 @@ body {
 
 ::-webkit-scrollbar {
   background-color: #edebe9;
-  width: 17px;
+  width: 16px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -66,16 +62,19 @@ body {
   align-items: center;
 }
 
-/* .idk::-webkit-scrollbar-thumb {
-  background-color: #edebe9;
-} */
-
 /* firefox */
 .idk {
   scrollbar-width: 0;
 }
+/* chrome */
+.idk::-webkit-scrollbar {
+  background-color: #edebe9;
+  width: 0px;
+}
 .idk::-webkit-scrollbar-thumb {
+  background-color: #edebe9;
   visibility: hidden;
+  border: 1px solid #edebe9;
 }
 
 .testing button {
