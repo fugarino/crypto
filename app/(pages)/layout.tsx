@@ -23,7 +23,7 @@ export default function RootLayout({
               {children}
             </main>
           </div> */}
-          <div className="min-h-screen bg-[#edebe9]">
+          <div className="min-h-screen bg-[#edebe9] w-screen">
             <nav className="flex items-center max-w-[1400px] mx-auto justify-between px-12 h-20">
               <div className="flex">
                 <Link href="/">
