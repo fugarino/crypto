@@ -30,6 +30,7 @@ const Comment = ({ coinid, comment }: any) => {
     return () => {
       unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const getMovies = (commentId: any) => {
