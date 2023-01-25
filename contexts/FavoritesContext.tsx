@@ -1,6 +1,6 @@
 "use client";
 
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import {
   createContext,
   ReactNode,
@@ -24,6 +24,7 @@ export const useFavoriteCoins = () => {
 export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
   const [coins, setCoins] = useState([]);
   const [favoriteCoins, setFavoriteCoins] = useState([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const { currentUser }: any = useAuth();
 
   useEffect(() => {
@@ -55,7 +56,30 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
     }
   }, [currentUser]);
 
-  const value = { coins, setCoins, favoriteCoins, setFavoriteCoins };
+  useEffect(() => {
+    if (currentUser) {
+      const unsubscribe = onSnapshot(
+        collection(db, "notifications", currentUser.uid, "notis"),
+        (snapshot) => {
+          setNotifications(
+            snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
+          );
+        }
+      );
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [currentUser]);
+
+  const value = {
+    coins,
+    setCoins,
+    favoriteCoins,
+    setFavoriteCoins,
+    notifications,
+    setNotifications,
+  };
   return (
     <FavoriteCoinsContext.Provider value={value}>
       {children}

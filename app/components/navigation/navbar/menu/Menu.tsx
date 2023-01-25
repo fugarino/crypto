@@ -19,7 +19,7 @@ const Menu = () => {
       {links.map((link) => (
         <li key={link.href}>
           <Link
-            className={`relative top-1 ${
+            className={`relative top-1 text-[0.9rem] ${
               link.href === path ? "text-black" : "text-[#696969]"
             } font-medium hover:text-black transition-all duration-300 ease-out`}
             href={link.href}

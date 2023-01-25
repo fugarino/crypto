@@ -30,10 +30,8 @@ const CoinsTableList = () => {
   return (
     <section className="px-12 max-w-[1400px] mx-auto">
       <header className="mt-1 ml-6">
-        <h1 className="font-bold text-[1.5rem]">Cryptocurrencies</h1>
-        <h2 className="relative -top-2 text-[#67676d]">
-          share your thoughts on the top coins
-        </h2>
+        <h1 className="font-bold text-[1.5rem]">Search</h1>
+        <h2 className="relative -top-2 text-[#67676d]">top cryptocurrencies</h2>
       </header>
       <div className="flex items-center h-[4rem] px-[2rem] bg-white rounded-lg shadow-md">
         <div className="flex justify-center w-[5%] text-gray-400">
@@ -104,7 +102,7 @@ const CoinsTableList = () => {
         </li>
       </ul>
       <div className="flex mt-10">
-        <ol className="w-[80%] space-y-1 pr-10">
+        <ol className="w-[80%] space-y-1 mr-10">
           {[...coins]
             .sort((a, b) => sortList(a, b))
             .filter(

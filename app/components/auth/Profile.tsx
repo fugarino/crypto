@@ -9,7 +9,7 @@ const Profile = () => {
   return (
     <div className="flex items-center justify-between">
       <div></div>
-      {currentUser && currentUser.emailVerified ? <UserBtns /> : <SignInBtn />}
+      {currentUser ? <UserBtns /> : <SignInBtn />}
     </div>
   );
 };

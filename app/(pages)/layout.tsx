@@ -24,20 +24,20 @@ export default function RootLayout({
             </main>
           </div> */}
           <div className="min-h-screen bg-[#edebe9] w-screen">
-            <nav className="flex items-center max-w-[1400px] mx-auto justify-between px-12 h-20">
-              <div className="flex">
-                <Link href="/">
-                  <div className="flex items-center justify-center">
-                    <Image src="/L.svg" height={20} width={20} alt="logo" />
-                  </div>
-                </Link>
-                <Menu />
-              </div>
-              <div className="relative top-[5px]">
-                <Profile />
-              </div>
-            </nav>
             <FavoriteCoinsProvider>
+              <nav className="flex items-center max-w-[1400px] mx-auto justify-between px-12 h-20">
+                <div className="flex">
+                  <Link href="/">
+                    <div className="flex items-center justify-center">
+                      <Image src="/L.svg" height={20} width={20} alt="logo" />
+                    </div>
+                  </Link>
+                  <Menu />
+                </div>
+                <div className="relative top-[5px]">
+                  <Profile />
+                </div>
+              </nav>
               <main className="w-full">{children}</main>
             </FavoriteCoinsProvider>
           </div>
