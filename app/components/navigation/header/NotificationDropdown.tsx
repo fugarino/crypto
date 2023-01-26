@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 
@@ -33,7 +34,12 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
       <h1 className="font-semibold text-[1.1rem]">Notifications</h1>
       {notifications &&
         notifications.map((nofi: any) => (
-          <div key={nofi.id}>{nofi.data.notification}</div>
+          <Link
+            href={`/coins/${nofi.data.coin}?id=${nofi.data.comment}`}
+            key={nofi.id}
+          >
+            {nofi.data.notification}
+          </Link>
         ))}
     </div>
   );

@@ -6,16 +6,32 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { db } from "../../../../firebase";
+import Reply from "./Reply";
 
 const Comment = ({ coinid, comment }: any) => {
   const [showInput, setShowInput] = useState(false);
   const [replyValue, setReplyValue] = useState("");
-  const [showReplies, setShowReplies] = useState(false);
+  // const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState<any[]>([]);
   const { currentUser }: any = useAuth();
+  const notiRef = useRef<any>();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const comments = notiRef.current.children;
+    console.log(comments);
+    if (replies.length > 0) {
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i].id === searchParams.get("id")) {
+          comments[i].scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  }, [searchParams, replies]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -45,16 +61,15 @@ const Comment = ({ coinid, comment }: any) => {
   //     .catch((err) => console.log(err.message));
   // };
 
-  const handleClick = () => {
-    setShowReplies((prevState) => !prevState);
-    // if (!showReplies) getMovies(comment.id);
-  };
+  // const handleClick = () => {
+  //   setShowReplies((prevState) => !prevState);
+  // };
 
   const handleReply = async (e: any) => {
     e.preventDefault();
     if (!replyValue) return;
     try {
-      await addDoc(
+      const { id } = await addDoc(
         collection(db, "comments", coinid, "messages", comment.id, "comments"),
         {
           reply: replyValue,
@@ -66,10 +81,12 @@ const Comment = ({ coinid, comment }: any) => {
         collection(db, "notifications", comment.data.userId, "notis"),
         {
           notification: `${currentUser?.uid} replied to your comment`,
-          comment: comment.id,
+          comment: id,
+          coin: coinid,
           timestamp: serverTimestamp(),
         }
       );
+      console.log(id);
       // await setDoc(doc(db, "notifications", comment.data.userId), {
       //   notifications: notifications
       //     ? [...notifications, "You got a noti"]
@@ -91,11 +108,11 @@ const Comment = ({ coinid, comment }: any) => {
         <span className="font-bold">{comment.data.userId}</span>
         <span className="text-slate-600 ml-4">{comment.data.comment}</span>
       </div>
-      <button onClick={handleClick}>view replies</button>
+      {/* <button onClick={handleClick}>view replies</button> */}
       <span
         className="ml-10 cursor-pointer"
         onClick={() => {
-          setShowReplies(true);
+          // setShowReplies(true);
           setShowInput(true);
         }}
       >
@@ -113,16 +130,14 @@ const Comment = ({ coinid, comment }: any) => {
         </form>
       )}
       {/* <button onClick={() => handleViewMore(comment.id)}>reply</button> */}
-      {showReplies && (
-        <ul>
-          {replies.map((comment) => (
-            <div key={comment.id} className="text-slate-600 border-2">
-              <span className="font-bold">{comment.data.userId}</span>
-              <span className="ml-4">{comment.data.reply}</span>
-            </div>
-          ))}
-        </ul>
-      )}
+      {/* <ul ref={notiRef}>
+        <li id="2uCNoKszkF9ouhLUHS2X">hiiii</li>
+      </ul> */}
+      <ul className="ml-10" ref={notiRef}>
+        {replies.map((comment) => (
+          <Reply key={comment.id} comment={comment} />
+        ))}
+      </ul>
       {/* <span>{comment.id}</span> */}
     </li>
   );
