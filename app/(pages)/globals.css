@@ -113,3 +113,7 @@ body {
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;
 }
+
+.hioo {
+  background-color: #ff6565;
+}

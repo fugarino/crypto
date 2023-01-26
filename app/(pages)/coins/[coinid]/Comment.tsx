@@ -23,11 +23,18 @@ const Comment = ({ coinid, comment }: any) => {
 
   useEffect(() => {
     const comments = notiRef.current.children;
-    console.log(comments);
     if (replies.length > 0) {
       for (let i = 0; i < comments.length; i++) {
         if (comments[i].id === searchParams.get("id")) {
           comments[i].scrollIntoView({ behavior: "smooth" });
+          comments[i].classList.add("hioo");
+          const timer = setTimeout(
+            () => comments[i].classList.remove("hioo"),
+            2000
+          );
+          return () => {
+            clearTimeout(timer);
+          };
         }
       }
     }
