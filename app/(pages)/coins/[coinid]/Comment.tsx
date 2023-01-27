@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { db } from "../../../../firebase";
+import convertDate from "../../../../util/convertDate";
 import Reply from "./Reply";
 
 const Comment = ({ coinid, comment }: any) => {
@@ -93,7 +94,6 @@ const Comment = ({ coinid, comment }: any) => {
           timestamp: serverTimestamp(),
         }
       );
-      console.log(id);
       // await setDoc(doc(db, "notifications", comment.data.userId), {
       //   notifications: notifications
       //     ? [...notifications, "You got a noti"]
@@ -109,11 +109,22 @@ const Comment = ({ coinid, comment }: any) => {
   return (
     <li
       key={comment.id}
+      className="mx-10"
       style={{ border: "2px solid gray", marginBottom: "10px" }}
     >
       <div>
-        <span className="font-bold">{comment.data.userId}</span>
-        <span className="text-slate-600 ml-4">{comment.data.comment}</span>
+        <div className="flex items-center">
+          <div className="w-7 h-7 rounded-full overflow-hidden">
+            <picture>
+              <img src={comment.data.photoURL} alt="profile image" />
+            </picture>
+          </div>
+          <span className="font-bold ml-2">{comment.data.displayName}</span>
+          <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
+            {convertDate(comment.data.timestamp.toDate())}
+          </span>
+        </div>
+        <div className="text-slate-600 mt-1">{comment.data.comment}</div>
       </div>
       {/* <button onClick={handleClick}>view replies</button> */}
       <span

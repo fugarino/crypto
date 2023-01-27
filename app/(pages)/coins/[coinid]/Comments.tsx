@@ -82,8 +82,11 @@ const Comments = ({ coinid }: any) => {
       await addDoc(collection(db, "comments", coinid, "messages"), {
         comment: commentInput,
         userId: currentUser?.uid,
+        displayName: currentUser?.displayName,
+        photoURL: currentUser?.photoURL,
         timestamp: serverTimestamp(),
       });
+      setShowCommentInput(false);
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +129,7 @@ const Comments = ({ coinid }: any) => {
       </div>
       <div className="bg-white h-[30rem] mt-1 rounded-lg shadow-md">
         {showCommentInput && (
-          <div className="flex justify-between p-10">
+          <div className="flex justify-between p-10 pb-0">
             <form
               onSubmit={(e) => handleSubmit(e)}
               className="border-2 rounded-lg border-[#ECECEC] w-[80%]"
@@ -141,6 +144,7 @@ const Comments = ({ coinid }: any) => {
                 placeholder="add comment here..."
                 ref={textareaRef}
                 onChange={(e) => {
+                  setCommentInput(e.target.value);
                   setCurrentValue(e.target.value);
                   handleLength(e);
                 }}
@@ -164,9 +168,16 @@ const Comments = ({ coinid }: any) => {
             </button>
           </div>
         )}
-        <ul style={{ listStyle: "none" }}>
+        <ul style={{ listStyle: "none" }} className="py-10">
           {comments
-            .sort((a, b) => b.data.likes - a.data.likes)
+            .sort((a: any, b: any) => {
+              const currentDate: any = new Date();
+              const firstCommentDate: any = a.data.timestamp.toDate();
+              const secondCommentDate: any = b.data.timestamp.toDate();
+              const firstTimeDifference = currentDate - firstCommentDate;
+              const secondTimeDifference = currentDate - secondCommentDate;
+              return firstTimeDifference - secondTimeDifference;
+            })
             .map((comment) => (
               <div key={comment.id}>
                 <Comment comment={comment} coinid={coinid} />

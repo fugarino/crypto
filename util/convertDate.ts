@@ -12,7 +12,8 @@ const convertDate = (date: string) => {
 
   if (seconds < 60) return `${seconds} sec ago`;
   else if (minutes < 60) return `${minutes} min ago`;
-  else if (hours < 24) return `${hours} hrs ago`;
+  else if (hours === 1) return `${hours} h ago`;
+  else if (hours > 1 && hours < 24) return `${hours} hrs ago`;
   else return `${days} days ago`;
 };
 
