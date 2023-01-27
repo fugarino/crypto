@@ -117,3 +117,8 @@ body {
 .hioo {
   background-color: #ff6565;
 }
+
+textarea::-webkit-scrollbar {
+  width: 0;
+  scrollbar-width: 0;
+}

@@ -6,7 +6,7 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { db } from "../../../../firebase";
 import Comment from "./Comment";
@@ -14,9 +14,12 @@ import Comment from "./Comment";
 const Comments = ({ coinid }: any) => {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState<any[]>([]);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [currentValue, setCurrentValue] = useState("");
   // const [nestedComments, setNestedComments] = useState<any[]>([]);
   // const [test, setTest] = useState(false);
   const { currentUser }: any = useAuth();
+  const textareaRef = useRef<any>(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -33,6 +36,14 @@ const Comments = ({ coinid }: any) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (showCommentInput) {
+      textareaRef.current.style.height = "0px";
+      const scrollHeight = textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = scrollHeight + "px";
+    }
+  }, [currentValue, showCommentInput]);
 
   // const getMovies = (commentId: any) => {
   //   setTest(true);
@@ -83,7 +94,13 @@ const Comments = ({ coinid }: any) => {
             How are you feeling about{" "}
             <span className="font-bold">{coinid}</span> today?
           </span>
-          <span className="flex items-center ml-10 font-bold">
+          <button
+            className="ml-4 font-bold"
+            onClick={() => setShowCommentInput(true)}
+          >
+            add a comment
+          </button>
+          <span className="flex items-center ml-12 font-medium">
             <span className="mr-1">latest</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,17 +120,43 @@ const Comments = ({ coinid }: any) => {
         </div>
       </div>
       <div className="bg-white h-[30rem] mt-1 rounded-lg shadow-md">
-        {currentUser ? (
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <input
-              type="text"
-              value={commentInput}
-              onChange={(e) => setCommentInput(e.target.value)}
-            />
-            <button type="submit">add comment</button>
-          </form>
-        ) : (
-          <div>log in / sign up</div>
+        {showCommentInput && (
+          <div className="flex justify-between p-10">
+            <form
+              onSubmit={(e) => handleSubmit(e)}
+              className="border-2 rounded-lg border-[#ECECEC] w-[80%]"
+            >
+              {/* <input
+                type="text"
+                value={commentInput}
+                className="py-10 px-6 m-[2px] w-[99%]"
+                onChange={(e) => setCommentInput(e.target.value)}
+              /> */}
+              <textarea
+                placeholder="add comment here..."
+                ref={textareaRef}
+                onChange={(e) => {
+                  setCurrentValue(e.target.value);
+                }}
+                className="w-full h-auto resize-none outline-none p-[15px] px-6 rounded-xl"
+              ></textarea>
+              <div className="flex items-center justify-between mb-3 mx-8">
+                <span className="text-[0.9rem]">max:/240</span>
+                <button
+                  type="submit"
+                  className="bg-black px-6 py-2 rounded-md text-white"
+                >
+                  comment
+                </button>
+              </div>
+            </form>
+            <button
+              className="flex font-bold"
+              onClick={() => setShowCommentInput(false)}
+            >
+              cancel
+            </button>
+          </div>
         )}
         <ul style={{ listStyle: "none" }}>
           {comments
