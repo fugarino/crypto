@@ -16,6 +16,7 @@ const Comments = ({ coinid }: any) => {
   const [comments, setComments] = useState<any[]>([]);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [currentValue, setCurrentValue] = useState("");
+  const [currentLength, setCurrentLength] = useState(0);
   // const [nestedComments, setNestedComments] = useState<any[]>([]);
   // const [test, setTest] = useState(false);
   const { currentUser }: any = useAuth();
@@ -69,6 +70,10 @@ const Comments = ({ coinid }: any) => {
   //     console.log(error);
   //   }
   // };
+
+  const handleLength = (e: any) => {
+    setCurrentLength(e.target.value.length);
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -137,11 +142,12 @@ const Comments = ({ coinid }: any) => {
                 ref={textareaRef}
                 onChange={(e) => {
                   setCurrentValue(e.target.value);
+                  handleLength(e);
                 }}
-                className="w-full h-auto resize-none outline-none p-[15px] px-6 rounded-xl"
+                className="w-full h-auto resize-none outline-none py-[25px] px-8 rounded-xl"
               ></textarea>
               <div className="flex items-center justify-between mb-3 mx-8">
-                <span className="text-[0.9rem]">max:/240</span>
+                <span className="text-[0.9rem]">{`max: ${currentLength}/240`}</span>
                 <button
                   type="submit"
                   className="bg-black px-6 py-2 rounded-md text-white"
