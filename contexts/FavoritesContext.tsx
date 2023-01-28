@@ -40,11 +40,11 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
 
   useEffect(() => {
     if (currentUser) {
-      const coinRef = doc(db, "watchlist", currentUser.uid);
+      const coinRef = doc(db, "users", currentUser.uid);
 
       const unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
-          setFavoriteCoins(coin.data().coins);
+          setFavoriteCoins(coin.data().favoriteCoins);
         } else {
           console.log("No items in watchlist");
         }
@@ -59,7 +59,7 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
   useEffect(() => {
     if (currentUser) {
       const unsubscribe = onSnapshot(
-        collection(db, "notifications", currentUser.uid, "notis"),
+        collection(db, "users", currentUser.uid, "notifications"),
         (snapshot) => {
           setNotifications(
             snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))

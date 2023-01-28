@@ -14,11 +14,11 @@ const FavoriteCoins = () => {
   const { coins, favoriteCoins }: any = useFavoriteCoins();
   const router = useRouter();
 
-  const removeFromFavorites = async (id: any) => {
-    const coinRef = doc(db, "watchlist", currentUser.uid);
+  const removeFromFavorites = async (coin: any) => {
+    const coinRef = doc(db, "users", currentUser.uid);
     try {
       await updateDoc(coinRef, {
-        coins: favoriteCoins.filter((watch: any) => watch !== id),
+        favoriteCoins: favoriteCoins.filter((watch: any) => watch !== coin?.id),
       });
     } catch (error) {
       console.log(error);
@@ -49,7 +49,7 @@ const FavoriteCoins = () => {
             <div>
               <ul className="grid grid-cols-5 gap-y-3 gap-x-4">
                 {coins.map((coin: any) => {
-                  if (favoriteCoins.includes(coin.id)) {
+                  if (favoriteCoins && favoriteCoins.includes(coin.id)) {
                     return (
                       <li
                         key={coin.name}
@@ -63,7 +63,7 @@ const FavoriteCoins = () => {
                         onClick={() =>
                           !edit
                             ? router.push(`/coins/${coin.id}`)
-                            : removeFromFavorites(coin.id)
+                            : removeFromFavorites(coin)
                         }
                       >
                         <header>

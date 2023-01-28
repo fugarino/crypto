@@ -21,6 +21,7 @@
     "chart.js": "^4.1.2",
     "encoding": "^0.1.13",
     "firebase": "^9.14.0",
+    "firebase-tools": "^11.21.0",
     "framer-motion": "^8.2.4",
     "i": "^0.3.7",
     "next": "^13.1.1",

@@ -149,7 +149,7 @@ const CoinsTableList = () => {
             {currentUser ? (
               <ul className="space-y-4">
                 {coins.map((coin: any) => {
-                  if (favoriteCoins.includes(coin.id)) {
+                  if (favoriteCoins && favoriteCoins.includes(coin.id)) {
                     return (
                       <Link key={coin.name} href={`/coins/${coin.id}`}>
                         <li

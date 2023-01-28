@@ -9,24 +9,30 @@ const FavoritesBtn = ({ coin }: any) => {
   const { currentUser }: any = useAuth();
   const { favoriteCoins }: any = useFavoriteCoins();
 
-  const inFavorites = favoriteCoins.includes(coin?.id);
+  const inFavorites = favoriteCoins && favoriteCoins.includes(coin?.id);
 
   const addToFavorites = async () => {
-    const coinRef = doc(db, "watchlist", currentUser.uid);
+    const coinRef = doc(db, "users", currentUser.uid);
     try {
-      await setDoc(coinRef, {
-        coins: favoriteCoins ? [...favoriteCoins, coin?.id] : [coin?.id],
-      });
+      await setDoc(
+        coinRef,
+        {
+          favoriteCoins: favoriteCoins
+            ? [...favoriteCoins, coin?.id]
+            : [coin?.id],
+        },
+        { merge: true }
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   const removeFromFavorites = async () => {
-    const coinRef = doc(db, "watchlist", currentUser.uid);
+    const coinRef = doc(db, "users", currentUser.uid);
     try {
       await updateDoc(coinRef, {
-        coins: favoriteCoins.filter((watch: any) => watch !== coin?.id),
+        favoriteCoins: favoriteCoins.filter((watch: any) => watch !== coin?.id),
       });
     } catch (error) {
       console.log(error);

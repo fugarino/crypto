@@ -16,6 +16,7 @@ const Comments = ({ coinid }: any) => {
   const [comments, setComments] = useState<any[]>([]);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [currentValue, setCurrentValue] = useState("");
+  const [sortBy, setSortBy] = useState("latest");
   const [currentLength, setCurrentLength] = useState(0);
   // const [nestedComments, setNestedComments] = useState<any[]>([]);
   // const [test, setTest] = useState(false);
@@ -85,6 +86,7 @@ const Comments = ({ coinid }: any) => {
         displayName: currentUser?.displayName,
         photoURL: currentUser?.photoURL,
         timestamp: serverTimestamp(),
+        upvotes: 0,
       });
       setShowCommentInput(false);
     } catch (error) {
@@ -108,7 +110,7 @@ const Comments = ({ coinid }: any) => {
           >
             add a comment
           </button>
-          <span className="flex items-center ml-12 font-medium">
+          {/* <span className="flex items-center ml-12 font-medium">
             <span className="mr-1">latest</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -124,10 +126,19 @@ const Comments = ({ coinid }: any) => {
                 d="M19.5 8.25l-7.5 7.5-7.5-7.5"
               />
             </svg>
-          </span>
+          </span> */}
+          <select
+            name="sort"
+            id="sort-comments"
+            className="ml-12 font-medium bg-inherit outline-none cursor-pointer"
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="latest">latest</option>
+            <option value="top">top</option>
+          </select>
         </div>
       </div>
-      <div className="bg-white h-[30rem] mt-1 rounded-lg shadow-md">
+      <div className="bg-white min-h-[30rem] mt-1 rounded-lg shadow-md">
         {showCommentInput && (
           <div className="flex justify-between p-10 pb-0">
             <form
@@ -169,14 +180,22 @@ const Comments = ({ coinid }: any) => {
           </div>
         )}
         <ul style={{ listStyle: "none" }} className="py-10">
-          {comments
+          {[...comments]
             .sort((a: any, b: any) => {
-              const currentDate: any = new Date();
-              const firstCommentDate: any = a.data.timestamp.toDate();
-              const secondCommentDate: any = b.data.timestamp.toDate();
-              const firstTimeDifference = currentDate - firstCommentDate;
-              const secondTimeDifference = currentDate - secondCommentDate;
-              return firstTimeDifference - secondTimeDifference;
+              if (sortBy === "latest") {
+                const currentDate: any = new Date();
+                try {
+                  const firstCommentDate: any = a?.data.timestamp.toDate();
+                  const secondCommentDate: any = b?.data.timestamp.toDate();
+                  const firstTimeDifference = currentDate - firstCommentDate;
+                  const secondTimeDifference = currentDate - secondCommentDate;
+                  return firstTimeDifference - secondTimeDifference;
+                } catch (error) {
+                  return 0 - 0;
+                }
+              } else {
+                return b?.data.upvotes - a?.data.upvotes;
+              }
             })
             .map((comment) => (
               <div key={comment.id}>

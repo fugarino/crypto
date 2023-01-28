@@ -3,8 +3,10 @@
 import {
   addDoc,
   collection,
+  doc,
   onSnapshot,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -86,7 +88,7 @@ const Comment = ({ coinid, comment }: any) => {
         }
       );
       await addDoc(
-        collection(db, "notifications", comment.data.userId, "notis"),
+        collection(db, "users", comment.data.userId, "notifications"),
         {
           notification: `${currentUser?.uid} replied to your comment`,
           comment: id,
@@ -106,6 +108,28 @@ const Comment = ({ coinid, comment }: any) => {
     setShowInput(false);
   };
 
+  const handleUpvote = async (prevUpvotes: number, id: string) => {
+    try {
+      const docRef = doc(db, "comments", coinid, "messages", id);
+      await updateDoc(docRef, {
+        upvotes: prevUpvotes + 1,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDownvote = async (prevUpvotes: number, id: string) => {
+    try {
+      const docRef = doc(db, "comments", coinid, "messages", id);
+      await updateDoc(docRef, {
+        upvotes: prevUpvotes - 1,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <li
       key={comment.id}
@@ -116,26 +140,69 @@ const Comment = ({ coinid, comment }: any) => {
         <div className="flex items-center">
           <div className="w-7 h-7 rounded-full overflow-hidden">
             <picture>
-              <img src={comment.data.photoURL} alt="profile image" />
+              <img src={comment?.data.photoURL} alt="profile image" />
             </picture>
           </div>
-          <span className="font-bold ml-2">{comment.data.displayName}</span>
+          <span className="font-bold ml-2">{comment?.data.displayName}</span>
           <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
-            {convertDate(comment.data.timestamp.toDate())}
+            {comment.data.timestamp
+              ? convertDate(comment?.data?.timestamp.toDate())
+              : "0 sec ago"}
           </span>
         </div>
-        <div className="text-slate-600 mt-1">{comment.data.comment}</div>
+        <div className="text-slate-600 mt-1">{comment?.data.comment}</div>
+        <div>
+          <button
+            className="mr-2"
+            onClick={() => handleUpvote(comment?.data.upvotes, comment?.id)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className="w-3 h-3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 15.75l7.5-7.5 7.5 7.5"
+              />
+            </svg>
+          </button>
+          <span>{comment?.data.upvotes}</span>
+          <button
+            className="ml-2"
+            onClick={() => handleDownvote(comment?.data.upvotes, comment?.id)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className="w-3 h-3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button
+            className="ml-10 cursor-pointer"
+            onClick={() => {
+              // setShowReplies(true);
+              setShowInput(true);
+            }}
+          >
+            reply
+          </button>
+        </div>
       </div>
       {/* <button onClick={handleClick}>view replies</button> */}
-      <span
-        className="ml-10 cursor-pointer"
-        onClick={() => {
-          // setShowReplies(true);
-          setShowInput(true);
-        }}
-      >
-        reply
-      </span>
       {showInput && (
         <form onSubmit={(e) => handleReply(e)}>
           <input
