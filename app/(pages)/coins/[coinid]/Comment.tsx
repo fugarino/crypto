@@ -20,6 +20,7 @@ const Comment = ({ coinid, comment }: any) => {
   const [replyValue, setReplyValue] = useState("");
   // const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState<any[]>([]);
+  const [commentDisplayName, setCommentDisplayName] = useState("unkown");
   const { currentUser }: any = useAuth();
   const notiRef = useRef<any>();
   const searchParams = useSearchParams();
@@ -58,6 +59,22 @@ const Comment = ({ coinid, comment }: any) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const coinRef = doc(db, "users", currentUser.uid);
+
+    const unsubscribe = onSnapshot(coinRef, (coin) => {
+      if (coin.exists()) {
+        setCommentDisplayName(coin.data().displayName);
+      } else {
+        console.log("No items in watchlist");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [currentUser]);
 
   // const getMovies = (commentId: any) => {
   //   setShowReplies(true);
@@ -143,7 +160,7 @@ const Comment = ({ coinid, comment }: any) => {
               <img src={comment?.data.photoURL} alt="profile image" />
             </picture>
           </div>
-          <span className="font-bold ml-2">{comment?.data.displayName}</span>
+          <span className="font-bold ml-2">{commentDisplayName}</span>
           <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
             {comment.data.timestamp
               ? convertDate(comment?.data?.timestamp.toDate())

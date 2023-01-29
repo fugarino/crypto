@@ -1,13 +1,32 @@
 "use client";
 
 import { PencilIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
+import { db } from "../../../../firebase";
 import ProfileEditForm from "./ProfileEditForm";
 
 const ProfileCard = () => {
   const { currentUser, logout }: any = useAuth();
   const [editProfile, setEditProfile] = useState(false);
+  const [currentUserDisplayName, setCurrentUserDisplayName] = useState("");
+
+  useEffect(() => {
+    const coinRef = doc(db, "users", currentUser.uid);
+
+    const unsubscribe = onSnapshot(coinRef, (coin) => {
+      if (coin.exists()) {
+        setCurrentUserDisplayName(coin.data().displayName);
+      } else {
+        console.log("No items in watchlist");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [currentUser]);
 
   return (
     <section className="relative -top-[16px] transition-all ease-out duration-150">
@@ -50,7 +69,7 @@ const ProfileCard = () => {
             </button>
             <div className="flex flex-col items-center justify-center">
               <h1 className="font-semibold text-lg mt-1">
-                {currentUser.displayName}
+                {currentUserDisplayName}
               </h1>
               <p className="text-gray-600">{currentUser.email}</p>
             </div>

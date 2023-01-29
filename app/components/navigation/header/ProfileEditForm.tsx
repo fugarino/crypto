@@ -1,8 +1,9 @@
 import { updateProfile } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { storage } from "../../../../firebase";
+import { db, storage } from "../../../../firebase";
 import LightInputField from "../../auth/forms/LightInputField";
 
 interface IProfileEditForm {
@@ -45,8 +46,12 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
           await updateProfile(currentUser, {
             displayName: updatedDisplayName,
           });
+          await updateDoc(doc(db, "users", currentUser.uid), {
+            displayName: updatedDisplayName,
+          });
         }
-        window.location.reload();
+        setEditProfile(false);
+        // window.location.reload();
       } else {
         setEditProfile(false);
       }
