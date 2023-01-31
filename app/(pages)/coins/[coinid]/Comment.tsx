@@ -61,7 +61,7 @@ const Comment = ({ coinid, comment }: any) => {
   }, []);
 
   useEffect(() => {
-    const coinRef = doc(db, "users", currentUser.uid);
+    const coinRef = doc(db, "users", comment.data.userId);
 
     const unsubscribe = onSnapshot(coinRef, (coin) => {
       if (coin.exists()) {
@@ -74,7 +74,8 @@ const Comment = ({ coinid, comment }: any) => {
     return () => {
       unsubscribe();
     };
-  }, [currentUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const getMovies = (commentId: any) => {
   //   setShowReplies(true);
@@ -101,13 +102,14 @@ const Comment = ({ coinid, comment }: any) => {
         {
           reply: replyValue,
           userId: currentUser?.uid,
+          displayName: currentUser.displayName,
           timestamp: serverTimestamp(),
         }
       );
       await addDoc(
         collection(db, "users", comment.data.userId, "notifications"),
         {
-          notification: `${currentUser?.uid} replied to your comment`,
+          notification: `${currentUser?.displayName} replied to your comment`,
           comment: id,
           coin: coinid,
           timestamp: serverTimestamp(),
@@ -142,6 +144,33 @@ const Comment = ({ coinid, comment }: any) => {
       await updateDoc(docRef, {
         upvotes: prevUpvotes - 1,
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAltReplyClick = async (userId: string, name: string) => {
+    try {
+      const { id } = await addDoc(
+        collection(db, "comments", coinid, "messages", comment.id, "comments"),
+        {
+          reply: `@${name} hello`,
+          userId: currentUser?.uid,
+          displayName: currentUser.displayName,
+          timestamp: serverTimestamp(),
+        }
+      );
+      await addDoc(collection(db, "users", userId, "notifications"), {
+        notification: `${currentUser?.displayName} replied to your comment`,
+        comment: id,
+        coin: coinid,
+        timestamp: serverTimestamp(),
+      });
+      // await setDoc(doc(db, "notifications", comment.data.userId), {
+      //   notifications: notifications
+      //     ? [...notifications, "You got a noti"]
+      //     : ["You got a noti"],
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -236,8 +265,12 @@ const Comment = ({ coinid, comment }: any) => {
         <li id="2uCNoKszkF9ouhLUHS2X">hiiii</li>
       </ul> */}
       <ul className="ml-10" ref={notiRef}>
-        {replies.map((comment) => (
-          <Reply key={comment.id} comment={comment} />
+        {replies.map((reply) => (
+          <Reply
+            key={reply.id}
+            reply={reply}
+            handleAltReplyClick={handleAltReplyClick}
+          />
         ))}
       </ul>
       {/* <span>{comment.id}</span> */}

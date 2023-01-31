@@ -36,6 +36,7 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
         notifications.map((nofi: any) => (
           <Link
             href={`/coins/${nofi.data.coin}?id=${nofi.data.comment}`}
+            onClick={() => setShowDropdown(false)}
             key={nofi.id}
           >
             {nofi.data.notification}
