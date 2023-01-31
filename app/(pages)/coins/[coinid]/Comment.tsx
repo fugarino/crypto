@@ -149,12 +149,16 @@ const Comment = ({ coinid, comment }: any) => {
     }
   };
 
-  const handleAltReplyClick = async (userId: string, name: string) => {
+  const handleAltReplyClick = async (
+    userId: string,
+    name: string,
+    response: string
+  ) => {
     try {
       const { id } = await addDoc(
         collection(db, "comments", coinid, "messages", comment.id, "comments"),
         {
-          reply: `@${name} hello`,
+          reply: `@${name} ${response}`,
           userId: currentUser?.uid,
           displayName: currentUser.displayName,
           timestamp: serverTimestamp(),
@@ -265,13 +269,26 @@ const Comment = ({ coinid, comment }: any) => {
         <li id="2uCNoKszkF9ouhLUHS2X">hiiii</li>
       </ul> */}
       <ul className="ml-10" ref={notiRef}>
-        {replies.map((reply) => (
-          <Reply
-            key={reply.id}
-            reply={reply}
-            handleAltReplyClick={handleAltReplyClick}
-          />
-        ))}
+        {[...replies]
+          .sort((a, b) => {
+            const currentDate: any = new Date();
+            try {
+              const firstCommentDate: any = a?.data.timestamp.toDate();
+              const secondCommentDate: any = b?.data.timestamp.toDate();
+              const firstTimeDifference = currentDate - firstCommentDate;
+              const secondTimeDifference = currentDate - secondCommentDate;
+              return secondTimeDifference - firstTimeDifference;
+            } catch (error) {
+              return 0 - 0;
+            }
+          })
+          .map((reply) => (
+            <Reply
+              key={reply.id}
+              reply={reply}
+              handleAltReplyClick={handleAltReplyClick}
+            />
+          ))}
       </ul>
       {/* <span>{comment.id}</span> */}
     </li>
