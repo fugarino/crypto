@@ -26,17 +26,6 @@ const Comment = ({ coinid, comment }: any) => {
   const notiRef = useRef<any>();
   const searchParams = useSearchParams();
 
-  // const storage = getStorage();
-  // const spaceRef = ref(storage, comment.userId);
-
-  // getDownloadURL(spaceRef)
-  //   .then((url) => {
-  //     setCurrentImage(url);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-
   useEffect(() => {
     const coinRef = doc(db, "users", comment.data.userId);
 
@@ -65,6 +54,8 @@ const Comment = ({ coinid, comment }: any) => {
             () => comments[i].classList.remove("hioo"),
             2000
           );
+          const newURL = location.href.split("?")[0];
+          window.history.pushState("object", document.title, newURL);
           return () => {
             clearTimeout(timer);
           };
@@ -214,88 +205,88 @@ const Comment = ({ coinid, comment }: any) => {
   };
 
   return (
-    <li
-      key={comment.id}
-      className="mx-10"
-      style={{ border: "2px solid gray", marginBottom: "10px" }}
-    >
-      <div>
-        <div className="flex items-center">
-          <div className="rounded-full overflow-hidden">
-            <picture>
-              <img
-                src={
-                  currentImage
-                    ? currentImage
-                    : currentUser.photoURL
-                    ? currentUser.photoURL
-                    : "/Untitled (5).svg"
-                }
-                alt="profile image"
-                className="w-7 h-7 object-cover"
-              />
-            </picture>
-          </div>
-          <span className="font-bold ml-2">{commentDisplayName}</span>
-          <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
-            {comment.data.timestamp
-              ? convertDate(comment?.data?.timestamp.toDate())
-              : "0 sec ago"}
-          </span>
+    <li key={comment.id} className="mx-10 mb-10">
+      <div className="flex mb-6">
+        <div className="mt-[2px]">
+          <picture>
+            <img
+              src={
+                currentImage
+                  ? currentImage
+                  : currentUser.photoURL
+                  ? currentUser.photoURL
+                  : "/Untitled (5).svg"
+              }
+              alt="profile image"
+              className="w-10 h-10 object-cover rounded-full overflow-hidden"
+            />
+          </picture>
         </div>
-        <div className="text-slate-600 mt-1">{comment?.data.comment}</div>
-        <div>
-          <button
-            className="mr-2"
-            onClick={() => handleUpvote(comment?.data.upvotes, comment?.id)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={3}
-              stroke="currentColor"
-              className="w-3 h-3"
+        <div className="ml-3">
+          <div>
+            <span className="font-bold">{commentDisplayName}</span>
+            <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
+              {comment.data.timestamp
+                ? convertDate(comment?.data?.timestamp.toDate())
+                : "0 sec ago"}
+            </span>
+            <div className="text-slate-600 max-w-[750px]">
+              {comment?.data.comment}
+            </div>
+          </div>
+          <div>
+            <button
+              className="mr-1"
+              onClick={() => handleUpvote(comment?.data.upvotes, comment?.id)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 15.75l7.5-7.5 7.5 7.5"
-              />
-            </svg>
-          </button>
-          <span>{comment?.data.upvotes}</span>
-          <button
-            className="ml-2"
-            onClick={() => handleDownvote(comment?.data.upvotes, comment?.id)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={3}
-              stroke="currentColor"
-              className="w-3 h-3"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                stroke="currentColor"
+                className="w-3 h-3"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 15.75l7.5-7.5 7.5 7.5"
+                />
+              </svg>
+            </button>
+            <span className="text-[0.9rem]">{comment?.data.upvotes}</span>
+            <button
+              className="ml-1"
+              onClick={() => handleDownvote(comment?.data.upvotes, comment?.id)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-              />
-            </svg>
-          </button>
-          <span className="ml-6 inline-flex items-center justify-center">
-            <span>{`replies (${repliesLength})`}</span>
-          </span>
-          <button
-            className="ml-10 cursor-pointer"
-            onClick={() => {
-              // setShowReplies(true);
-              setShowInput(true);
-            }}
-          >
-            reply
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                stroke="currentColor"
+                className="w-3 h-3"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+            <span className="ml-4 inline-flex items-center justify-center">
+              <span className="text-[0.9rem] font-semibold">{`replies (${repliesLength})`}</span>
+            </span>
+            <button
+              className="ml-6 cursor-pointer text-[0.9rem] font-semibold"
+              onClick={() => {
+                // setShowReplies(true);
+                setShowInput(true);
+              }}
+            >
+              reply
+            </button>
+          </div>
         </div>
       </div>
       {/* <button onClick={handleClick}>view replies</button> */}
@@ -314,7 +305,7 @@ const Comment = ({ coinid, comment }: any) => {
       {/* <ul ref={notiRef}>
         <li id="2uCNoKszkF9ouhLUHS2X">hiiii</li>
       </ul> */}
-      <ul className="ml-10" ref={notiRef}>
+      <ul className="ml-16 mt-3" ref={notiRef}>
         {[...replies]
           .sort((a, b) => {
             const currentDate: any = new Date();
