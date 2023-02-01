@@ -9,7 +9,7 @@ const Notifications = () => {
   return (
     <div>
       <button onClick={() => setShowDropdown((prevState) => !prevState)}>
-        <BellIcon className="h-5 w-5 text-gray-500" />
+        <BellIcon className="h-5 w-5 text-gray-500 relative top-1" />
       </button>
       {showDropdown && (
         <NotificationDropdown setShowDropdown={setShowDropdown} />

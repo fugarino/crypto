@@ -1,5 +1,5 @@
 import { updateProfile } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
@@ -21,10 +21,40 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
     currentUser.displayName
   );
 
+  // const updatePhotoURL = async (profilePhoto: string) => {
+  //   try {
+  //     const docRef = doc(db, "users", currentUser.uid);
+  //     await updateDoc(
+  //       docRef,
+  //       {
+  //         photoURL: profilePhoto,
+  //       },
+  //       { merge: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const upload = async (file: any, currentUser: any) => {
     const fileRef = ref(storage, currentUser.uid);
     setLoading(true);
-    await uploadBytes(fileRef, file);
+    await uploadBytes(fileRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        try {
+          const docRef = doc(db, "users", currentUser.uid);
+          setDoc(
+            docRef,
+            {
+              currentPhotoURL: url,
+            },
+            { merge: true }
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    });
     const photoURL: any = await getDownloadURL(fileRef);
     updateProfile(currentUser, { photoURL: photoURL });
   };
@@ -41,6 +71,7 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
       if (profilePhoto || updatedDisplayName !== currentUser.displayName) {
         if (profilePhoto) {
           await upload(profilePhoto, currentUser);
+          // await updatePhotoURL(profilePhoto);
         }
         if (updatedDisplayName !== currentUser.displayName) {
           await updateProfile(currentUser, {
@@ -58,6 +89,9 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
     } catch {
       setError("Unable to update profile");
     }
+    // if (profilePhoto) {
+    //   window.location.reload();
+    // }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

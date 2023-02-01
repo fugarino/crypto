@@ -84,7 +84,6 @@ const Comments = ({ coinid }: any) => {
         comment: commentInput,
         userId: currentUser?.uid,
         displayName: currentUser?.displayName,
-        photoURL: currentUser?.photoURL,
         timestamp: serverTimestamp(),
         upvotes: 0,
       });

@@ -18,12 +18,41 @@ import Reply from "./Reply";
 const Comment = ({ coinid, comment }: any) => {
   const [showInput, setShowInput] = useState(false);
   const [replyValue, setReplyValue] = useState("");
-  // const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState<any[]>([]);
+  const [repliesLength, setRepliesLength] = useState(0);
+  const [currentImage, setCurrentImage] = useState("");
   const [commentDisplayName, setCommentDisplayName] = useState("unkown");
   const { currentUser }: any = useAuth();
   const notiRef = useRef<any>();
   const searchParams = useSearchParams();
+
+  // const storage = getStorage();
+  // const spaceRef = ref(storage, comment.userId);
+
+  // getDownloadURL(spaceRef)
+  //   .then((url) => {
+  //     setCurrentImage(url);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+
+  useEffect(() => {
+    const coinRef = doc(db, "users", comment.data.userId);
+
+    const unsubscribe = onSnapshot(coinRef, (coin) => {
+      if (coin.exists()) {
+        setCurrentImage(coin.data().currentPhotoURL);
+      } else {
+        console.log("No items in watchlist");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const comments = notiRef.current.children;
@@ -43,6 +72,10 @@ const Comment = ({ coinid, comment }: any) => {
       }
     }
   }, [searchParams, replies]);
+
+  useEffect(() => {
+    setRepliesLength(replies.length);
+  }, [replies]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -188,9 +221,19 @@ const Comment = ({ coinid, comment }: any) => {
     >
       <div>
         <div className="flex items-center">
-          <div className="w-7 h-7 rounded-full overflow-hidden">
+          <div className="rounded-full overflow-hidden">
             <picture>
-              <img src={comment?.data.photoURL} alt="profile image" />
+              <img
+                src={
+                  currentImage
+                    ? currentImage
+                    : currentUser.photoURL
+                    ? currentUser.photoURL
+                    : "/Untitled (5).svg"
+                }
+                alt="profile image"
+                className="w-7 h-7 object-cover"
+              />
             </picture>
           </div>
           <span className="font-bold ml-2">{commentDisplayName}</span>
@@ -241,6 +284,9 @@ const Comment = ({ coinid, comment }: any) => {
               />
             </svg>
           </button>
+          <span className="ml-6 inline-flex items-center justify-center">
+            <span>{`replies (${repliesLength})`}</span>
+          </span>
           <button
             className="ml-10 cursor-pointer"
             onClick={() => {

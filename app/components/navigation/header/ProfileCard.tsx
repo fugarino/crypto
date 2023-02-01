@@ -10,6 +10,7 @@ import ProfileEditForm from "./ProfileEditForm";
 const ProfileCard = () => {
   const { currentUser, logout }: any = useAuth();
   const [editProfile, setEditProfile] = useState(false);
+  const [currentImage, setCurrentImage] = useState("");
   const [currentUserDisplayName, setCurrentUserDisplayName] = useState("");
 
   useEffect(() => {
@@ -28,13 +29,33 @@ const ProfileCard = () => {
     };
   }, [currentUser]);
 
+  useEffect(() => {
+    const coinRef = doc(db, "users", currentUser.uid);
+
+    const unsubscribe = onSnapshot(coinRef, (coin) => {
+      if (coin.exists()) {
+        setCurrentImage(coin.data().currentPhotoURL);
+      } else {
+        console.log("No items in watchlist");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [currentUser]);
+
   return (
     <section className="relative -top-[16px] transition-all ease-out duration-150">
       <div className="relative h-20 bg-slate-300">
         <picture>
           <img
             src={
-              currentUser.photoURL ? currentUser.photoURL : "/Untitled (5).svg"
+              currentImage
+                ? currentImage
+                : currentUser.photoURL
+                ? currentUser.photoURL
+                : "/Untitled (5).svg"
             }
             alt="profile picture"
             referrerPolicy="no-referrer"
