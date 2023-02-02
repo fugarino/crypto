@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 
@@ -11,7 +11,8 @@ interface IProfileDropDown {
 
 const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
   const ref = useRef<any>(null);
-  const { notifications }: any = useFavoriteCoins();
+  const { notifications, setHandleNotificationClick }: any = useFavoriteCoins();
+  const router = useRouter();
 
   const handleClickOutside = (e: any) => {
     if (ref.current && !ref.current.contains(e.target)) {
@@ -26,6 +27,12 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
     };
   });
 
+  const onNotificationClick = (notification: any) => {
+    setHandleNotificationClick(notification.data.comment);
+    router.push(`/coins/${notification.data.coin}`);
+    setShowDropdown(false);
+  };
+
   return (
     <div
       ref={ref}
@@ -34,13 +41,9 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
       <h1 className="font-semibold text-[1.1rem]">Notifications</h1>
       {notifications &&
         notifications.map((nofi: any) => (
-          <Link
-            href={`/coins/${nofi.data.coin}?id=${nofi.data.comment}`}
-            onClick={() => setShowDropdown(false)}
-            key={nofi.id}
-          >
+          <button onClick={() => onNotificationClick(nofi)} key={nofi.id}>
             {nofi.data.notification}
-          </Link>
+          </button>
         ))}
     </div>
   );

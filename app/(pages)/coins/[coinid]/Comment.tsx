@@ -8,9 +8,10 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
+import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 import { db } from "../../../../firebase";
 import convertDate from "../../../../util/convertDate";
 import Reply from "./Reply";
@@ -24,7 +25,33 @@ const Comment = ({ coinid, comment }: any) => {
   const [commentDisplayName, setCommentDisplayName] = useState("unkown");
   const { currentUser }: any = useAuth();
   const notiRef = useRef<any>();
-  const searchParams = useSearchParams();
+  const { handleNotificationClick, setHandleNotificationClick }: any =
+    useFavoriteCoins();
+  // const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (replies.length > 0 && handleNotificationClick !== "") {
+      const comments = notiRef?.current?.children;
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i].id === handleNotificationClick) {
+          comments[i].scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          comments[i].classList.add("hioo");
+          const timer = setTimeout(() => {
+            comments[i].classList.remove("hioo");
+            setHandleNotificationClick("");
+          }, 2000);
+          // setHandleNotificationClick("");
+          return () => {
+            clearTimeout(timer);
+          };
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleNotificationClick, replies]);
 
   useEffect(() => {
     const coinRef = doc(db, "users", comment.data.userId);
@@ -42,27 +69,6 @@ const Comment = ({ coinid, comment }: any) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const comments = notiRef.current.children;
-    if (replies.length > 0) {
-      for (let i = 0; i < comments.length; i++) {
-        if (comments[i].id === searchParams.get("id")) {
-          comments[i].scrollIntoView({ behavior: "smooth" });
-          comments[i].classList.add("hioo");
-          const timer = setTimeout(
-            () => comments[i].classList.remove("hioo"),
-            2000
-          );
-          const newURL = location.href.split("?")[0];
-          window.history.pushState("object", document.title, newURL);
-          return () => {
-            clearTimeout(timer);
-          };
-        }
-      }
-    }
-  }, [searchParams, replies]);
 
   useEffect(() => {
     setRepliesLength(replies.length);
@@ -100,18 +106,6 @@ const Comment = ({ coinid, comment }: any) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const getMovies = (commentId: any) => {
-  //   setShowReplies(true);
-  //   getDocs(
-  //     collection(db, "comments", coinid, "messages", commentId, "comments")
-  //   )
-  //     .then((res) => {
-  //       const movs = res.docs.map((doc) => ({ data: doc.data(), id: doc.id }));
-  //       setReplies(movs);
-  //     })
-  //     .catch((err) => console.log(err.message));
-  // };
 
   // const handleClick = () => {
   //   setShowReplies((prevState) => !prevState);

@@ -20,7 +20,7 @@ const CoinInfo = ({ id }: CoinInfoProps) => {
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, []);
 
   useEffect(() => {
     const fetchCoinData = async () => {
