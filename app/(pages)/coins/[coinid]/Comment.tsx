@@ -4,8 +4,10 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   onSnapshot,
   serverTimestamp,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 // import { useSearchParams } from "next/navigation";
@@ -151,6 +153,17 @@ const Comment = ({ coinid, comment }: any) => {
       await updateDoc(docRef, {
         upvotes: prevUpvotes + 1,
       });
+      const altDocRef = doc(db, "trending", id);
+      const docSnap = await getDoc(altDocRef);
+      if (docSnap.exists()) {
+        setDoc(altDocRef, {
+          upvotes: docSnap.data().upvotes + 1,
+        });
+      } else {
+        setDoc(altDocRef, {
+          upvotes: 1,
+        });
+      }
     } catch (error) {
       console.log(error);
     }
