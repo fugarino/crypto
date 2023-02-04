@@ -18,11 +18,13 @@ const TrendingCoinsList = () => {
     coinPrice: 0,
   });
 
-  const trendingCoins = [...coins]
-    .sort(
-      (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
-    )
-    .slice(0, 10);
+  const trendingCoins =
+    coins &&
+    [...coins]
+      .sort(
+        (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
+      )
+      .slice(0, 10);
 
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -63,7 +65,7 @@ const TrendingCoinsList = () => {
 
   return (
     <section className="mt-10">
-      {coins.length > 1 && (
+      {coins?.length > 1 && (
         <>
           <TrendingChart
             id={displayCoin.coinId || trendingCoins[0].id}

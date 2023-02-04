@@ -1,6 +1,6 @@
 import { Suspense } from "react";
+import TrendingCoinsList from "../components/coins/trending/TrendingCoinsList";
 import News from "../components/news/News";
-import TrendingCoinsList from "./forum/Test";
 import "./globals.css";
 
 const HomePage = () => {
