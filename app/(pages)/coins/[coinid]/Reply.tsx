@@ -48,15 +48,15 @@ const Reply = ({ reply, handleAltReplyClick }: any) => {
   }, []);
 
   return (
-    <li id={reply.id} className="mb-6 flex">
+    <li id={reply.id} className="py-1 mb-3 pl-16 flex">
       <div className="mt-[3px]">
         <picture>
           <img
             src={
               currentImage
                 ? currentImage
-                : reply.data.userId === currentUser.uid
-                ? currentUser.photoURL
+                : reply.data.userId === currentUser?.uid
+                ? currentUser?.photoURL
                 : "/Untitled (5).svg"
             }
             alt="profile image"
@@ -67,7 +67,9 @@ const Reply = ({ reply, handleAltReplyClick }: any) => {
       <div className="ml-3">
         <div>
           <div>
-            <span className="font-bold">{commentDisplayName}</span>
+            <span className="font-bold text-[0.9rem]">
+              {commentDisplayName}
+            </span>
             <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
               {reply.data.timestamp
                 ? convertDate(reply.data.timestamp.toDate())
@@ -75,10 +77,18 @@ const Reply = ({ reply, handleAltReplyClick }: any) => {
             </span>
           </div>
           <div>
-            <span className="text-slate-600">{reply.data.reply}</span>
+            <span className="text-black font-semibold">
+              {reply.data.at && `@${reply.data.at} `}
+            </span>
+            <span className="text-black">{reply.data.reply}</span>
           </div>
         </div>
-        <button onClick={() => setShowAltInput(true)}>reply</button>
+        <button
+          onClick={() => setShowAltInput(true)}
+          className="text-[0.9rem] font-semibold"
+        >
+          reply
+        </button>
       </div>
       {showAltInput && (
         <form

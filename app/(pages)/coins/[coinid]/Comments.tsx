@@ -8,6 +8,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
+import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
 import { db } from "../../../../firebase";
 import Comment from "./Comment";
 
@@ -18,10 +19,35 @@ const Comments = ({ coinid }: any) => {
   const [currentValue, setCurrentValue] = useState("");
   const [sortBy, setSortBy] = useState("latest");
   const [currentLength, setCurrentLength] = useState(0);
+  const { trendingComment, setTrendingComment }: any = useFavoriteCoins();
   // const [nestedComments, setNestedComments] = useState<any[]>([]);
   // const [test, setTest] = useState(false);
   const { currentUser }: any = useAuth();
   const textareaRef = useRef<any>(null);
+  const commentRef = useRef<any>();
+
+  useEffect(() => {
+    if (comments.length > 0 && trendingComment !== "") {
+      const comments = commentRef?.current?.children;
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i].id === trendingComment) {
+          comments[i].scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          comments[i].classList.add("hioo");
+          const timer = setTimeout(() => {
+            comments[i].classList.remove("hioo");
+            setTrendingComment("");
+          }, 2000);
+          return () => {
+            clearTimeout(timer);
+          };
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trendingComment, comments]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -130,8 +156,8 @@ const Comments = ({ coinid }: any) => {
             </button>
           </div>
         )}
-        <ul style={{ listStyle: "none" }} className="py-10">
-          {comments.length > 1 &&
+        <ul ref={commentRef} style={{ listStyle: "none" }} className="py-10">
+          {comments.length > 0 &&
             comments
               .sort((a: any, b: any) => {
                 if (sortBy === "latest") {
@@ -151,9 +177,7 @@ const Comments = ({ coinid }: any) => {
                 }
               })
               .map((comment) => (
-                <div key={comment.id}>
-                  <Comment comment={comment} coinid={coinid} />
-                </div>
+                <Comment key={comment.id} comment={comment} coinid={coinid} />
               ))}
         </ul>
       </div>

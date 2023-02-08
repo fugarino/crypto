@@ -158,6 +158,16 @@ const Comment = ({ coinid, comment }: any) => {
       if (docSnap.exists()) {
         setDoc(altDocRef, {
           upvotes: docSnap.data().upvotes + 1,
+          coin: coinid,
+          comment: comment,
+          timestamp: convertDate(comment?.data?.timestamp.toDate()),
+          photo: currentImage
+            ? currentImage
+            : currentUser?.photoURL
+            ? currentUser?.photoURL
+            : "/Untitled (5).svg",
+          repliesLength: repliesLength,
+          commentId: id,
         });
       } else {
         setDoc(altDocRef, {
@@ -189,7 +199,8 @@ const Comment = ({ coinid, comment }: any) => {
       const { id } = await addDoc(
         collection(db, "comments", coinid, "messages", comment.id, "comments"),
         {
-          reply: `@${name} ${response}`,
+          at: name,
+          reply: response,
           userId: currentUser?.uid,
           displayName: currentUser.displayName,
           timestamp: serverTimestamp(),
@@ -212,7 +223,7 @@ const Comment = ({ coinid, comment }: any) => {
   };
 
   return (
-    <li key={comment.id} className="mx-10 mb-10">
+    <li key={comment.id} id={comment.id} className="mx-10 mb-10">
       <div className="flex mb-6">
         <div className="mt-[2px]">
           <picture>
@@ -220,8 +231,8 @@ const Comment = ({ coinid, comment }: any) => {
               src={
                 currentImage
                   ? currentImage
-                  : currentUser.photoURL
-                  ? currentUser.photoURL
+                  : currentUser?.photoURL
+                  ? currentUser?.photoURL
                   : "/Untitled (5).svg"
               }
               alt="profile image"
@@ -231,7 +242,9 @@ const Comment = ({ coinid, comment }: any) => {
         </div>
         <div className="ml-3">
           <div>
-            <span className="font-bold">{commentDisplayName}</span>
+            <span className="font-bold text-[0.9rem]">
+              {commentDisplayName}
+            </span>
             <span className="ml-2 text-[0.9rem] text-[#8C8C8C]">
               {comment.data.timestamp
                 ? convertDate(comment?.data?.timestamp.toDate())
@@ -312,7 +325,7 @@ const Comment = ({ coinid, comment }: any) => {
       {/* <ul ref={notiRef}>
         <li id="2uCNoKszkF9ouhLUHS2X">hiiii</li>
       </ul> */}
-      <ul className="ml-16 mt-3" ref={notiRef}>
+      <ul className="mt-3" ref={notiRef}>
         {[...replies]
           .sort((a, b) => {
             const currentDate: any = new Date();

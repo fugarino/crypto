@@ -26,6 +26,7 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
   const [favoriteCoins, setFavoriteCoins] = useState([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [handleNotificationClick, setHandleNotificationClick] = useState(false);
+  const [trendingComment, setTrendingComment] = useState("");
   const { currentUser }: any = useAuth();
 
   useEffect(() => {
@@ -82,6 +83,8 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
     setNotifications,
     handleNotificationClick,
     setHandleNotificationClick,
+    trendingComment,
+    setTrendingComment,
   };
   return (
     <FavoriteCoinsContext.Provider value={value}>

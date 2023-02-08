@@ -19,7 +19,7 @@ const SignInForm = () => {
   const [loading, setLoading] = useState(false);
 
   const { signin, loginWithGoogle, forgotPassword }: any = useAuth();
-  const router = useRouter();
+  const router = useRouter?.();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
