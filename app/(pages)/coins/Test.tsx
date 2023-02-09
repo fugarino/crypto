@@ -1,30 +1,35 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useFavoriteCoins } from "../../../contexts/FavoritesContext";
 import CarouselBtnL from "../../components/coins/trending/CarouselBtnL";
 import CarouselBtnR from "../../components/coins/trending/CarouselBtnR";
 import TrendingCoin from "../../components/coins/trending/TrendingCoin";
 
-const TrendingCoinsList = () => {
+const Test = ({ sortMethod }: any) => {
   const [margin, setMargin] = useState(0);
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(true);
   const { coins }: any = useFavoriteCoins();
+  const router = useRouter();
   const carousel: any = useRef();
-  const [displayCoin, setDisplayCoin] = useState<any>({
-    coinId: "",
-    coinPrice: 0,
-  });
+  // const [displayCoin, setDisplayCoin] = useState<any>({
+  //   coinId: "",
+  //   coinPrice: 0,
+  // });
+
+  const helpSort = (a: any, b: any) => {
+    if (sortMethod === "+") {
+      return b.price_change_percentage_24h - a.price_change_percentage_24h;
+    } else if (sortMethod === "-") {
+      return a.price_change_percentage_24h - b.price_change_percentage_24h;
+    }
+    return b[sortMethod] - a[sortMethod];
+  };
 
   const trendingCoins =
-    coins &&
-    [...coins]
-      .sort(
-        (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
-      )
-      .slice(0, 10);
-
+    coins && [...coins].sort((a, b) => helpSort(a, b)).slice(0, 10);
   useLayoutEffect(() => {
     const updateSize = () => {
       window.innerWidth > 1400
@@ -55,11 +60,8 @@ const TrendingCoinsList = () => {
       : setRight(true);
   };
 
-  const handleCoinClick = (coinId: string, coinPrice: number) => {
-    setDisplayCoin({
-      coinId,
-      coinPrice,
-    });
+  const handleCoinClick = (coin: string) => {
+    router.push(`/coins/${coin}`);
   };
 
   return (
@@ -85,7 +87,7 @@ const TrendingCoinsList = () => {
                   image={coin.image}
                   current_price={coin.current_price}
                   price_change_percentage_24h={coin.price_change_percentage_24h}
-                  handleCoinClick={handleCoinClick}
+                  handleCoinClick={() => handleCoinClick(coin.id)}
                 />
               ))}
             </ul>
@@ -102,4 +104,4 @@ const TrendingCoinsList = () => {
   );
 };
 
-export default TrendingCoinsList;
+export default Test;

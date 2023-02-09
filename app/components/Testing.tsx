@@ -96,7 +96,7 @@ const Testing = () => {
           </div>
         </div>
         <div>
-          <div className="max-w-[750px] pb-[3px]">{displayCoin.comment}</div>
+          <div className="max-w-[850px] pb-[3px]">{displayCoin.comment}</div>
           <div className="flex">
             <div className="flex items-center space-x-1">
               <svg

@@ -250,7 +250,7 @@ const Comment = ({ coinid, comment }: any) => {
                 ? convertDate(comment?.data?.timestamp.toDate())
                 : "0 sec ago"}
             </span>
-            <div className="text-slate-600 max-w-[750px]">
+            <div className="text-slate-600 max-w-[850px]">
               {comment?.data.comment}
             </div>
           </div>
