@@ -54,9 +54,9 @@ const Testing = () => {
       if (maxDocument !== null) {
         setDisplayCoin(() => ({
           photo: maxDocument.data().photo,
-          displayName: maxDocument.data().comment.data.displayName,
+          displayName: maxDocument.data().comment?.data.displayName,
           coin: maxDocument.data().coin,
-          comment: maxDocument.data().comment.data.comment,
+          comment: maxDocument.data().comment?.data.comment,
           upvotes: maxDocument.data().upvotes + 1,
           timestamp: maxDocument.data().timestamp,
           repliesLength: maxDocument.data().repliesLength,

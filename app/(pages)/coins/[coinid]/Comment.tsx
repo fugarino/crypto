@@ -11,6 +11,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 // import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
@@ -25,11 +26,13 @@ const Comment = ({ coinid, comment }: any) => {
   const [repliesLength, setRepliesLength] = useState(0);
   const [currentImage, setCurrentImage] = useState("");
   const [commentDisplayName, setCommentDisplayName] = useState("unkown");
+  const [userLikeStatus, setUserLikeStatus] = useState("");
   const { currentUser }: any = useAuth();
   const notiRef = useRef<any>();
   const { handleNotificationClick, setHandleNotificationClick }: any =
     useFavoriteCoins();
   // const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (replies.length > 0 && handleNotificationClick !== "") {
@@ -75,6 +78,29 @@ const Comment = ({ coinid, comment }: any) => {
   useEffect(() => {
     setRepliesLength(replies.length);
   }, [replies]);
+
+  useEffect(() => {
+    const docRef = doc(
+      db,
+      "comments",
+      coinid,
+      "messages",
+      comment.id,
+      "upvotes",
+      currentUser.uid
+    );
+    const unsubscribe = onSnapshot(docRef, (coin) => {
+      if (coin.exists()) {
+        setUserLikeStatus(coin.data().upvote);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -149,24 +175,51 @@ const Comment = ({ coinid, comment }: any) => {
 
   const handleUpvote = async (prevUpvotes: number, id: string) => {
     try {
-      const docRef = doc(db, "comments", coinid, "messages", id);
-      await updateDoc(docRef, {
-        upvotes: prevUpvotes + 1,
-      });
+      // testing
+      if (currentUser) {
+        const docRef = doc(db, "comments", coinid, "messages", id);
+        await updateDoc(docRef, {
+          upvotes:
+            userLikeStatus === ""
+              ? prevUpvotes + 1
+              : userLikeStatus === "downvoted"
+              ? prevUpvotes + 2
+              : prevUpvotes - 1,
+        });
+
+        const altDocRef = doc(
+          db,
+          "comments",
+          coinid,
+          "messages",
+          comment.id,
+          "upvotes",
+          currentUser.uid
+        );
+        await setDoc(altDocRef, {
+          upvote:
+            userLikeStatus === "" || userLikeStatus === "downvoted"
+              ? "upvoted"
+              : "",
+        });
+      } else {
+        router.push("/signin");
+      }
+      // trending comment
       const altDocRef = doc(db, "trending", id);
       const docSnap = await getDoc(altDocRef);
       if (docSnap.exists()) {
         setDoc(altDocRef, {
           upvotes: docSnap.data().upvotes + 1,
           coin: coinid,
-          comment: comment,
-          timestamp: convertDate(comment?.data?.timestamp.toDate()),
-          photo: currentImage
-            ? currentImage
-            : currentUser?.photoURL
-            ? currentUser?.photoURL
-            : "/Untitled (5).svg",
-          repliesLength: repliesLength,
+          // comment: comment,
+          // timestamp: convertDate(comment?.data?.timestamp.toDate()),
+          // photo: currentImage
+          //   ? currentImage
+          //   : currentUser?.photoURL
+          //   ? currentUser?.photoURL
+          //   : "/Untitled (5).svg",
+          // repliesLength: repliesLength,
           commentId: id,
         });
       } else {
@@ -181,10 +234,35 @@ const Comment = ({ coinid, comment }: any) => {
 
   const handleDownvote = async (prevUpvotes: number, id: string) => {
     try {
-      const docRef = doc(db, "comments", coinid, "messages", id);
-      await updateDoc(docRef, {
-        upvotes: prevUpvotes - 1,
-      });
+      if (currentUser) {
+        const docRef = doc(db, "comments", coinid, "messages", id);
+        await updateDoc(docRef, {
+          upvotes:
+            userLikeStatus === ""
+              ? prevUpvotes - 1
+              : userLikeStatus === "upvoted"
+              ? prevUpvotes - 2
+              : prevUpvotes + 1,
+        });
+
+        const altDocRef = doc(
+          db,
+          "comments",
+          coinid,
+          "messages",
+          comment.id,
+          "upvotes",
+          currentUser.uid
+        );
+        await setDoc(altDocRef, {
+          upvote:
+            userLikeStatus === "" || userLikeStatus === "upvoted"
+              ? "downvoted"
+              : "",
+        });
+      } else {
+        router.push("/signin");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -222,6 +300,7 @@ const Comment = ({ coinid, comment }: any) => {
     }
   };
 
+  console.log(userLikeStatus);
   return (
     <li key={comment.id} id={comment.id} className="mx-10 mb-10">
       <div className="flex mb-6">
@@ -265,6 +344,9 @@ const Comment = ({ coinid, comment }: any) => {
                 viewBox="0 0 24 24"
                 strokeWidth={3}
                 stroke="currentColor"
+                style={{
+                  color: userLikeStatus === "upvoted" ? "#000" : "#8C8C8C",
+                }}
                 className="w-3 h-3"
               >
                 <path
@@ -285,6 +367,9 @@ const Comment = ({ coinid, comment }: any) => {
                 viewBox="0 0 24 24"
                 strokeWidth={3}
                 stroke="currentColor"
+                style={{
+                  color: userLikeStatus === "downvoted" ? "#000" : "#8C8C8C",
+                }}
                 className="w-3 h-3"
               >
                 <path
@@ -294,6 +379,13 @@ const Comment = ({ coinid, comment }: any) => {
                 />
               </svg>
             </button>
+            {/* <span>
+              {userLikeStatus === ""
+                ? "null"
+                : userLikeStatus === "upvoted"
+                ? "upvoted"
+                : "downvoted"}
+            </span> */}
             <span className="ml-4 inline-flex items-center justify-center">
               <span className="text-[0.9rem] font-semibold">{`replies (${repliesLength})`}</span>
             </span>

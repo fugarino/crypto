@@ -42,13 +42,21 @@ const CoinsPage = () => {
           />
         </div>
       </div>
-      <h1 className="pl-14 mt-8 font-medium text-[#67676d] ml-4">Top ranked</h1>
+      <h1 className="pl-14 mt-12 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
+        Top ranked
+      </h1>
       <Test sortMethod="market_cap" />
-      <h1 className="pl-14 font-medium text-[#67676d] ml-4">+24h</h1>
+      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
+        +24h
+      </h1>
       <Test sortMethod="+" />
-      <h1 className="pl-14 font-medium text-[#67676d] ml-4">-24h</h1>
+      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
+        -24h
+      </h1>
       <Test sortMethod="-" />
-      <h1 className="pl-14 font-medium text-[#67676d] ml-4">Supply</h1>
+      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
+        Supply
+      </h1>
       <Test sortMethod="circulating_supply" />
       <div className="mb-10"></div>
     </div>

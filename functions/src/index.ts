@@ -14,7 +14,7 @@ export const createUserDocument = functions.auth
 
 exports.scheduledFirestoreDelete = functions.pubsub
   .schedule("0 0 * * *")
-  .timeZone("EST")
+  .timeZone("CST")
   .onRun(async () => {
     const collectionRef = db.collection("trending");
 
