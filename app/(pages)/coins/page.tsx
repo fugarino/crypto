@@ -42,21 +42,53 @@ const CoinsPage = () => {
           />
         </div>
       </div>
-      <h1 className="pl-14 mt-12 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
-        Top ranked
-      </h1>
+      <h3 className="text-[#67676d] mt-8 pl-14 ml-4">
+        top <span className="font-bold">ranked</span>
+      </h3>
       <Test sortMethod="market_cap" />
-      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
-        +24h
-      </h1>
+      <h3 className="text-[#67676d] mt-4 pl-14 ml-4 flex items-center space-x-2">
+        <span>trending</span>
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={3}
+            stroke="currentColor"
+            className="w-3 h-3"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+            />
+          </svg>
+        </span>
+        <span className="font-bold">24h</span>
+      </h3>
       <Test sortMethod="+" />
-      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
-        -24h
-      </h1>
+      <h3 className="text-[#67676d] mt-4 pl-14 ml-4 flex items-center space-x-2">
+        <span>trending</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={3}
+          stroke="currentColor"
+          className="w-3 h-3"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25"
+          />
+        </svg>
+        <span className="font-bold">24h</span>
+      </h3>
       <Test sortMethod="-" />
-      <h1 className="pl-14 mt-3 font-bold text-[3rem] ml-4 text-[#cccccc] leading-[26px]">
-        Supply
-      </h1>
+      <h3 className="text-[#67676d] mt-4 pl-14 ml-4">
+        total <span className="font-bold">supply</span>
+      </h3>
       <Test sortMethod="circulating_supply" />
       <div className="mb-10"></div>
     </div>

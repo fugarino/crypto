@@ -159,6 +159,8 @@ const Comment = ({ coinid, comment }: any) => {
           comment: id,
           coin: coinid,
           timestamp: serverTimestamp(),
+          userId: comment.data.userId,
+          read: false,
         }
       );
       // await setDoc(doc(db, "notifications", comment.data.userId), {
@@ -187,7 +189,7 @@ const Comment = ({ coinid, comment }: any) => {
               : prevUpvotes - 1,
         });
 
-        const altDocRef = doc(
+        const upvoteDocRef = doc(
           db,
           "comments",
           coinid,
@@ -196,36 +198,37 @@ const Comment = ({ coinid, comment }: any) => {
           "upvotes",
           currentUser.uid
         );
-        await setDoc(altDocRef, {
+        await setDoc(upvoteDocRef, {
           upvote:
             userLikeStatus === "" || userLikeStatus === "downvoted"
               ? "upvoted"
               : "",
         });
+
+        // trending comment
+        const altDocRef = doc(db, "trending", id);
+        const docSnap = await getDoc(altDocRef);
+        if (docSnap.exists()) {
+          setDoc(altDocRef, {
+            upvotes:
+              userLikeStatus === ""
+                ? docSnap.data().upvotes + 1
+                : userLikeStatus === "upvoted"
+                ? docSnap.data().upvotes - 1
+                : docSnap.data().upvotes + 2,
+            coin: coinid,
+            commentId: id,
+          });
+        } else {
+          setDoc(altDocRef, {
+            upvotes:
+              userLikeStatus === "" ? 1 : userLikeStatus === "upvoted" ? -1 : 2,
+            coin: coinid,
+            commentId: id,
+          });
+        }
       } else {
         router.push("/signin");
-      }
-      // trending comment
-      const altDocRef = doc(db, "trending", id);
-      const docSnap = await getDoc(altDocRef);
-      if (docSnap.exists()) {
-        setDoc(altDocRef, {
-          upvotes: docSnap.data().upvotes + 1,
-          coin: coinid,
-          // comment: comment,
-          // timestamp: convertDate(comment?.data?.timestamp.toDate()),
-          // photo: currentImage
-          //   ? currentImage
-          //   : currentUser?.photoURL
-          //   ? currentUser?.photoURL
-          //   : "/Untitled (5).svg",
-          // repliesLength: repliesLength,
-          commentId: id,
-        });
-      } else {
-        setDoc(altDocRef, {
-          upvotes: 1,
-        });
       }
     } catch (error) {
       console.log(error);
@@ -288,6 +291,8 @@ const Comment = ({ coinid, comment }: any) => {
         notification: `${currentUser?.displayName} replied to your comment`,
         comment: id,
         coin: coinid,
+        userId: userId,
+        read: false,
         timestamp: serverTimestamp(),
       });
       // await setDoc(doc(db, "notifications", comment.data.userId), {
@@ -300,7 +305,6 @@ const Comment = ({ coinid, comment }: any) => {
     }
   };
 
-  console.log(userLikeStatus);
   return (
     <li key={comment.id} id={comment.id} className="mx-10 mb-10">
       <div className="flex mb-6">
@@ -329,7 +333,7 @@ const Comment = ({ coinid, comment }: any) => {
                 ? convertDate(comment?.data?.timestamp.toDate())
                 : "0 sec ago"}
             </span>
-            <div className="text-slate-600 max-w-[850px]">
+            <div className="text-slate-600 max-w-[900px]">
               {comment?.data.comment}
             </div>
           </div>

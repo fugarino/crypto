@@ -126,7 +126,7 @@ const Comments = ({ coinid }: any) => {
           <div className="flex justify-between p-10 pb-0">
             <form
               onSubmit={(e) => handleSubmit(e)}
-              className="border-2 rounded-lg border-[#ECECEC] w-[80%]"
+              className="border-2 rounded-lg border-[#ECECEC] w-[87%]"
             >
               <textarea
                 placeholder="add comment here..."

@@ -77,6 +77,19 @@ body {
   border: 1px solid #edebe9;
 }
 
+.idkk {
+  scrollbar-width: 5px;
+}
+/* chrome */
+.idkk::-webkit-scrollbar {
+  background-color: #ffffff;
+  width: 5px;
+}
+.idkk::-webkit-scrollbar-thumb {
+  background-color: #aaaaaa;
+  border: 1px solid #aaaaaa;
+}
+
 .testing button {
   opacity: 0;
   transition: all 0.3s ease;
@@ -122,4 +135,12 @@ body {
 textarea::-webkit-scrollbar {
   width: 0;
   scrollbar-width: 0;
+}
+
+.okidoki {
+  height: 30rem;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 12px;
 }
