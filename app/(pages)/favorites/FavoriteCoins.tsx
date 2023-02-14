@@ -4,15 +4,18 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useFavoriteCoins } from "../../../contexts/FavoritesContext";
+import { useUserData } from "../../../contexts/UserDataContext";
 import { db } from "../../../firebase";
+import { useCoinsStore } from "../../../src/CoinsStore";
 import styles from "./Favorites.module.css";
 
 const FavoriteCoins = () => {
   const { currentUser }: any = useAuth();
   const [edit, setEdit] = useState(false);
-  const { coins, favoriteCoins }: any = useFavoriteCoins();
+  const { coins, favoriteCoins }: any = useUserData();
   const router = useRouter();
+
+  const storeCoins = useCoinsStore.getState().coins;
 
   const removeFromFavorites = async (coin: any) => {
     const coinRef = doc(db, "users", currentUser.uid);
@@ -45,10 +48,10 @@ const FavoriteCoins = () => {
               </picture>
             )}
           </div>
-          {coins && (
+          {storeCoins && (
             <div>
               <ul className="grid grid-cols-5 gap-y-3 gap-x-4">
-                {coins.map((coin: any) => {
+                {storeCoins.map((coin: any) => {
                   if (favoriteCoins && favoriteCoins.includes(coin.id)) {
                     return (
                       <li

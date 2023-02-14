@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 import Comment from "./Comment";
 
@@ -19,7 +19,7 @@ const Comments = ({ coinid }: any) => {
   const [currentValue, setCurrentValue] = useState("");
   const [sortBy, setSortBy] = useState("latest");
   const [currentLength, setCurrentLength] = useState(0);
-  const { trendingComment, setTrendingComment }: any = useFavoriteCoins();
+  const { trendingComment, setTrendingComment }: any = useUserData();
   // const [nestedComments, setNestedComments] = useState<any[]>([]);
   // const [test, setTest] = useState(false);
   const { currentUser }: any = useAuth();

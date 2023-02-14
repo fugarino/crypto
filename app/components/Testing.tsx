@@ -3,7 +3,7 @@
 import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFavoriteCoins } from "../../contexts/FavoritesContext";
+import { useUserData } from "../../contexts/UserDataContext";
 import { db } from "../../firebase";
 import convertDate from "../../util/convertDate";
 
@@ -20,7 +20,7 @@ const Testing = () => {
     profileImage: "",
     displayName: "",
   });
-  const { setTrendingComment }: any = useFavoriteCoins();
+  const { setTrendingComment }: any = useUserData();
   const router = useRouter();
 
   useEffect(() => {

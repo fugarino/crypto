@@ -2,18 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
+import { useCoinsStore } from "../../../../src/CoinsStore";
 
 const CoinsTableList = () => {
   // const [coinsList, setCoinsList] = useState<any[]>([]);
-  const { coins }: any = useFavoriteCoins();
+  const { coins }: any = useUserData();
   const [filter, setFilter] = useState("market_cap");
   const [search, setSearch] = useState("");
   const router = useRouter();
 
-  // useEffect(() => {
-  //   setCoins(data);
-  // }, [data]);
+  const storeCoins: any = useCoinsStore.getState().coins;
 
   const sortList = (a: any, b: any) => {
     if (filter === "+") {
@@ -87,7 +86,7 @@ const CoinsTableList = () => {
       </section>
       <div className="flex mt-10">
         <ol className="w-full space-y-1 mx-4">
-          {[...coins]
+          {[...storeCoins]
             .sort((a, b) => sortList(a, b))
             .filter(
               (coin) =>

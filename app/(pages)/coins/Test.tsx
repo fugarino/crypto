@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useLayoutEffect, useRef, useState } from "react";
-import { useFavoriteCoins } from "../../../contexts/FavoritesContext";
+import { useUserData } from "../../../contexts/UserDataContext";
+import { useCoinsStore } from "../../../src/CoinsStore";
 import CarouselBtnL from "../../components/coins/trending/CarouselBtnL";
 import CarouselBtnR from "../../components/coins/trending/CarouselBtnR";
 import TrendingCoin from "../../components/coins/trending/TrendingCoin";
@@ -11,13 +12,15 @@ const Test = ({ sortMethod }: any) => {
   const [margin, setMargin] = useState(0);
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(true);
-  const { coins }: any = useFavoriteCoins();
+  const { coins }: any = useUserData();
   const router = useRouter();
   const carousel: any = useRef();
   // const [displayCoin, setDisplayCoin] = useState<any>({
   //   coinId: "",
   //   coinPrice: 0,
   // });
+
+  const storeCoins = useCoinsStore.getState().coins;
 
   const helpSort = (a: any, b: any) => {
     if (sortMethod === "+") {
@@ -29,7 +32,7 @@ const Test = ({ sortMethod }: any) => {
   };
 
   const trendingCoins =
-    coins && [...coins].sort((a, b) => helpSort(a, b)).slice(0, 10);
+    storeCoins && [...storeCoins].sort((a, b) => helpSort(a, b)).slice(0, 10);
   useLayoutEffect(() => {
     const updateSize = () => {
       window.innerWidth > 1400
@@ -66,7 +69,7 @@ const Test = ({ sortMethod }: any) => {
 
   return (
     <section className="mt-1">
-      {coins?.length > 1 && (
+      {storeCoins?.length > 1 && (
         <>
           <div className="relative testing">
             {left && (

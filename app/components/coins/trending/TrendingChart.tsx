@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -11,7 +12,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -33,23 +34,29 @@ interface TrendingChartProps {
 const TrendingChart = ({ id, price }: TrendingChartProps) => {
   const [historicData, setHistoricData] = useState<any[]>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(
+  const fetchData = async () => {
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`
+    );
+    const data = await res.json();
+    setHistoricData(data.prices);
+  };
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["chart", id],
+    queryFn: () =>
+      fetch(
         `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`
-      );
-      const data = await res.json();
-      setHistoricData(data.prices);
-    };
-    fetchData();
-  }, [id]);
+      ).then((res) => res.json()),
+    staleTime: 10 * (60 * 1000),
+  });
 
   return (
-    <section className="px-12 max-w-[1400px] mx-auto mb-14">
+    <section className="px-12 max-w-[1400px] mx-auto mb-14 h-[28rem]">
       <div className="flex justify-between items-center mx-4">
         <div>
           <h3 className="text-[#67676d]">
-            {id[0].toUpperCase() + id.slice(1)}
+            {id && id[0].toUpperCase() + id.slice(1)}
           </h3>
           <h2 className="font-bold text-[1.4rem]">${price}</h2>
         </div>
@@ -58,11 +65,11 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
         </aside>
       </div>
       <div className="flex justify-center">
-        {historicData && (
+        {data && (
           <div className="w-full h-[25rem]">
             <Line
               data={{
-                labels: historicData.map((coin) => {
+                labels: data.prices.map((coin: any) => {
                   let date = new Date(coin[0]);
                   let time =
                     date.getHours() > 12
@@ -73,7 +80,7 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
                 datasets: [
                   {
                     label: "",
-                    data: historicData.map((coin) => coin[1]),
+                    data: data.prices.map((coin: any) => coin[1]),
                     // borderColor: "#c8bcac",
                     // borderColor: "#ada293",
                     borderColor: "#8e8a85",

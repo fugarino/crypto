@@ -2,12 +2,12 @@
 
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 
 const FavoritesBtn = ({ coin }: any) => {
   const { currentUser }: any = useAuth();
-  const { favoriteCoins }: any = useFavoriteCoins();
+  const { favoriteCoins }: any = useUserData();
 
   const inFavorites = favoriteCoins && favoriteCoins.includes(coin?.id);
 

@@ -4,14 +4,14 @@ import { BellIcon } from "@heroicons/react/outline";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 import NotificationDropdown from "./NotificationDropdown";
 
 const Notifications = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotificationSymbol, setShowNotificationSymbol] = useState(false);
-  const { notifications }: any = useFavoriteCoins();
+  const { notifications }: any = useUserData();
   const { currentUser }: any = useAuth();
 
   useEffect(() => {

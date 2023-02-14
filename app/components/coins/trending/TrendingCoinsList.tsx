@@ -1,7 +1,8 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useEffect, useRef, useState } from "react";
+import { useUserData } from "../../../../contexts/UserDataContext";
+import { useCoinsStore } from "../../../../src/CoinsStore";
 import CarouselBtnL from "./CarouselBtnL";
 import CarouselBtnR from "./CarouselBtnR";
 import TrendingChart from "./TrendingChart";
@@ -11,22 +12,25 @@ const TrendingCoinsList = () => {
   const [margin, setMargin] = useState(0);
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(true);
-  const { coins }: any = useFavoriteCoins();
+  const { coins }: any = useUserData();
   const carousel: any = useRef();
   const [displayCoin, setDisplayCoin] = useState<any>({
     coinId: "",
     coinPrice: 0,
   });
 
-  const trendingCoins =
-    coins &&
-    [...coins]
+  const storeCoins = useCoinsStore.getState().coins;
+
+  const trendingCoins: any =
+    storeCoins &&
+    [...storeCoins]
       .sort(
-        (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
+        (a: any, b: any) =>
+          b.price_change_percentage_24h - a.price_change_percentage_24h
       )
       .slice(0, 10);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const updateSize = () => {
       window.innerWidth > 1400
         ? setMargin((window.innerWidth - 1400) / 2 + 48)
@@ -65,11 +69,14 @@ const TrendingCoinsList = () => {
 
   return (
     <section className="mt-10">
-      {coins?.length > 1 && (
+      {storeCoins?.length > 1 && (
         <>
           <TrendingChart
-            id={displayCoin.coinId || trendingCoins[0].id}
-            price={displayCoin.coinPrice || trendingCoins[0].current_price}
+            id={displayCoin.coinId || (trendingCoins && trendingCoins[0].id)}
+            price={
+              displayCoin.coinPrice ||
+              (trendingCoins && trendingCoins[0].current_price)
+            }
           />
           <div className="relative testing">
             {left && (

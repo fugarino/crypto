@@ -3,7 +3,7 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 
 interface IProfileDropDown {
@@ -13,7 +13,7 @@ interface IProfileDropDown {
 
 const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
   const ref = useRef<any>(null);
-  const { notifications, setHandleNotificationClick }: any = useFavoriteCoins();
+  const { notifications, setHandleNotificationClick }: any = useUserData();
   const router = useRouter();
 
   const handleClickOutside = (e: any) => {

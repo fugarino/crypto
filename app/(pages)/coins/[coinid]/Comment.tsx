@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { useFavoriteCoins } from "../../../../contexts/FavoritesContext";
+import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 import convertDate from "../../../../util/convertDate";
 import Reply from "./Reply";
@@ -30,7 +30,7 @@ const Comment = ({ coinid, comment }: any) => {
   const { currentUser }: any = useAuth();
   const notiRef = useRef<any>();
   const { handleNotificationClick, setHandleNotificationClick }: any =
-    useFavoriteCoins();
+    useUserData();
   // const searchParams = useSearchParams();
   const router = useRouter();
 

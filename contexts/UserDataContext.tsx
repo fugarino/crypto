@@ -15,30 +15,18 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-const FavoriteCoinsContext = createContext({});
+const UserDataContext = createContext({});
 
-export const useFavoriteCoins = () => {
-  return useContext(FavoriteCoinsContext);
+export const useUserData = () => {
+  return useContext(UserDataContext);
 };
 
-export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
-  const [coins, setCoins] = useState([]);
+export const UserDataProvider = ({ children }: ProviderProps) => {
   const [favoriteCoins, setFavoriteCoins] = useState([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [handleNotificationClick, setHandleNotificationClick] = useState(false);
   const [trendingComment, setTrendingComment] = useState("");
   const { currentUser }: any = useAuth();
-
-  useEffect(() => {
-    const fetchCoins = async () => {
-      const res = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
-      );
-      const data = await res.json();
-      setCoins(data);
-    };
-    fetchCoins();
-  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -75,8 +63,6 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
   }, [currentUser]);
 
   const value = {
-    coins,
-    setCoins,
     favoriteCoins,
     setFavoriteCoins,
     notifications,
@@ -87,8 +73,8 @@ export const FavoriteCoinsProvider = ({ children }: ProviderProps) => {
     setTrendingComment,
   };
   return (
-    <FavoriteCoinsContext.Provider value={value}>
+    <UserDataContext.Provider value={value}>
       {children}
-    </FavoriteCoinsContext.Provider>
+    </UserDataContext.Provider>
   );
 };

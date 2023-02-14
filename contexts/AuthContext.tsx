@@ -71,15 +71,14 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   };
   return (
     <AuthContext.Provider value={value}>
-      {!loading ? (
-        children
-      ) : (
+      {loading && (
         <div className="bg-gray-[#f4f4f4] center">
           <picture>
             <img src="/RocketLoader.svg" alt="loader" className="w-20 h-20" />
           </picture>
         </div>
       )}
+      {children}
     </AuthContext.Provider>
   );
 };

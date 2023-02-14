@@ -1,46 +1,40 @@
-import Image from "next/image";
-import Link from "next/link";
+import React from "react";
 import { AuthProvider } from "../../contexts/AuthContext";
-import { FavoriteCoinsProvider } from "../../contexts/FavoritesContext";
-import Profile from "../components/auth/Profile";
-import Menu from "../components/navigation/navbar/menu/Menu";
+import { UserDataProvider } from "../../contexts/UserDataContext";
+import { useCoinsStore } from "../../src/CoinsStore";
+import StoreInitializer from "../components/coins/trending/StoreInitializer";
+import Navbar from "../components/navigation/navbar/Navbar";
 import "./globals.css";
+import ReactQueryWrapper from "./ReactQueryWrapper";
 
-export default function RootLayout({
+const getData = async () => {
+  const res = await fetch(
+    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
+    { next: { revalidate: 10 * (60 * 1000) } }
+  );
+  return res.json();
+};
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const data = await getData();
+  useCoinsStore.setState({ coins: data });
+
   return (
     <html>
       <head />
       <body>
         <AuthProvider>
-          {/* <div className="flex bg-[#edebe9]">
+          <UserDataProvider>
+            <StoreInitializer data={data} />
             <Navbar />
-            <main className="w-full max-w-[1400px] mx-auto px-12 pb-6">
-              <Profile />
-              {children}
-            </main>
-          </div> */}
-          <div className="min-h-screen bg-[#edebe9] w-screen">
-            <FavoriteCoinsProvider>
-              <nav className="flex items-center max-w-[1400px] mx-auto justify-between px-12 h-20">
-                <div className="flex">
-                  <Link href="/">
-                    <div className="flex items-center justify-center">
-                      <Image src="/L.svg" height={20} width={20} alt="logo" />
-                    </div>
-                  </Link>
-                  <Menu />
-                </div>
-                <div className="relative top-[5px]">
-                  <Profile />
-                </div>
-              </nav>
+            <ReactQueryWrapper>
               <main className="w-full">{children}</main>
-            </FavoriteCoinsProvider>
-          </div>
+            </ReactQueryWrapper>
+          </UserDataProvider>
         </AuthProvider>
       </body>
     </html>

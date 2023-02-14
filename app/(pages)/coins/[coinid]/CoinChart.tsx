@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -11,7 +12,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -26,29 +27,25 @@ ChartJS.register(
 );
 
 const CoinChart = ({ id }: any) => {
-  const [historicData, setHistoricData] = useState<any[]>();
   const [days, setDays] = useState(1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(
+  const { data } = useQuery({
+    queryKey: ["coinChart", id, days],
+    queryFn: () =>
+      fetch(
         `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}`
-      );
-      const data = await res.json();
-      setHistoricData(data.prices);
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [days]);
+      ).then((res) => res.json()),
+    staleTime: 10 * (60 * 1000),
+  });
 
   return (
     <div className="h-full">
       <div className="h-[93%]">
-        {historicData && (
+        {data && (
           <div className="h-full">
             <Line
               data={{
-                labels: historicData.map((coin) => {
+                labels: data.prices.map((coin: any) => {
                   let date = new Date(coin[0]);
                   let time =
                     date.getHours() > 12
@@ -59,7 +56,7 @@ const CoinChart = ({ id }: any) => {
                 datasets: [
                   {
                     label: "",
-                    data: historicData.map((coin) => coin[1]),
+                    data: data.prices.map((coin: any) => coin[1]),
                     borderColor: "#8e8a85",
                   },
                 ],
