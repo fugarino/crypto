@@ -9,7 +9,7 @@ const SignInBtn = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex">
+    <button className="flex">
       <Link
         href="/signin"
         className={`border-2 border-slate-500 px-8 py-2 rounded-md
@@ -23,7 +23,7 @@ const SignInBtn = () => {
       >
         Sign in
       </Link>
-    </div>
+    </button>
   );
 };
 
