@@ -15,18 +15,33 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-const UserDataContext = createContext({});
+interface IUserData {
+  favoriteCoins: string[];
+  setFavoriteCoins: React.Dispatch<React.SetStateAction<string[]>>;
+  notifications: { id: string; data: any }[];
+  setNotifications: React.Dispatch<
+    React.SetStateAction<{ id: string; data: any }[]>
+  >;
+  handleNotificationClick: boolean;
+  setHandleNotificationClick: React.Dispatch<React.SetStateAction<boolean>>;
+  trendingComment: string;
+  setTrendingComment: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const UserDataContext = createContext<IUserData>({} as IUserData);
 
 export const useUserData = () => {
   return useContext(UserDataContext);
 };
 
 export const UserDataProvider = ({ children }: ProviderProps) => {
-  const [favoriteCoins, setFavoriteCoins] = useState([]);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [favoriteCoins, setFavoriteCoins] = useState<string[]>([]);
+  const [notifications, setNotifications] = useState<
+    { id: string; data: any }[]
+  >([]);
   const [handleNotificationClick, setHandleNotificationClick] = useState(false);
   const [trendingComment, setTrendingComment] = useState("");
-  const { currentUser }: any = useAuth();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     if (currentUser) {

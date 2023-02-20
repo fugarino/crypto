@@ -22,14 +22,12 @@ export interface INotification {
 }
 
 const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
-  const { notifications, setHandleNotificationClick }: any = useUserData();
-  const ref = useRef<any>(null);
+  const { notifications, setHandleNotificationClick } = useUserData();
+  const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const notificationsByLatest = useMemo(() => {
-    return [...notifications].sort((a: INotification, b: INotification) =>
-      sortTime(a, b)
-    );
+    return [...notifications].sort((a, b) => sortTime(a, b));
   }, [notifications]);
 
   const handleClickOutside = (e: any) => {
@@ -46,7 +44,10 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
   });
 
   const onNotificationClick = async (notification: INotification) => {
-    setHandleNotificationClick(notification.data.comment);
+    setHandleNotificationClick(() => {
+      if (notification.data.comment) return true;
+      return false;
+    });
     router.push(`/coins/${notification.data.coin}`);
     setShowDropdown(false);
     const docRef = doc(
@@ -64,7 +65,7 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
   return (
     <div
       ref={ref}
-      className="absolute z-10 flex flex-col top-[55px] right-[50px]
+      className="absolute z-10 flex flex-col top-[55px] right-[30px] sm:right-[50px]
        bg-white p-[4px] w-[23rem] h-[22rem] shadowProfile rounded-md overflow-hidden"
     >
       <div className="overflow-y-scroll idkk p-4">

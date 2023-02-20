@@ -22,7 +22,20 @@ interface IAuthProviderProps {
   children: ReactNode;
 }
 
-const AuthContext = createContext({});
+interface IAuthContext {
+  currentUser:
+    | {
+        uid: string;
+      }
+    | undefined;
+  signup: (email: string, password: string) => Promise<{}>;
+  signin: (email: string, password: string) => Promise<{}>;
+  logout: () => void;
+  loginWithGoogle: () => Promise<{}>;
+  forgotPassword: (email: string) => Promise<void>;
+}
+
+const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export const useAuth = () => {
   return useContext(AuthContext);
