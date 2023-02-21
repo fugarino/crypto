@@ -44,6 +44,14 @@ body {
   box-sizing: border-box;
 }
 
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 ::-webkit-scrollbar {
   background-color: #edebe9;
   width: 12px;

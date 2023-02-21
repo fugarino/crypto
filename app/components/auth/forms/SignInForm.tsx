@@ -18,7 +18,12 @@ const SignInForm = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { signin, loginWithGoogle, forgotPassword }: any = useAuth();
+  const {
+    signin,
+    loginWithGoogle,
+    loginWithGoogleMobile,
+    forgotPassword,
+  }: any = useAuth();
   const router = useRouter?.();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,9 +51,9 @@ const SignInForm = () => {
     setError("");
     setLoading(true);
     try {
-      await loginWithGoogle();
+      await loginWithGoogleMobile();
       router.push("/");
-    } catch {
+    } catch (error) {
       setError("Unable to signin with google.");
     }
     setLoading(false);

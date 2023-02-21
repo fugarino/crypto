@@ -22,7 +22,7 @@ const TrendingCoinsList = () => {
   const storeCoins = useCoinsStore.getState().coins;
 
   const trendingCoins: any =
-    storeCoins &&
+    storeCoins.length > 1 &&
     [...storeCoins]
       .sort(
         (a: any, b: any) =>

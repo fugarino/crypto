@@ -80,24 +80,26 @@ const Comment = ({ coinid, comment }: any) => {
   }, [replies]);
 
   useEffect(() => {
-    const docRef = doc(
-      db,
-      "comments",
-      coinid,
-      "messages",
-      comment.id,
-      "upvotes",
-      currentUser.uid
-    );
-    const unsubscribe = onSnapshot(docRef, (coin) => {
-      if (coin.exists()) {
-        setUserLikeStatus(coin.data().upvote);
-      }
-    });
+    if (currentUser) {
+      const docRef = doc(
+        db,
+        "comments",
+        coinid,
+        "messages",
+        comment.id,
+        "upvotes",
+        currentUser.uid
+      );
+      const unsubscribe = onSnapshot(docRef, (coin) => {
+        if (coin.exists()) {
+          setUserLikeStatus(coin.data().upvote);
+        }
+      });
 
-    return () => {
-      unsubscribe();
-    };
+      return () => {
+        unsubscribe();
+      };
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

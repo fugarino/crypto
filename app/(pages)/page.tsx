@@ -17,7 +17,6 @@ const HomePage = () => {
         <News />
       </Suspense>
       <TrendingCoinsList />
-      {/* <Helper /> */}
       <div className="px-12 max-w-[1400px] mx-auto mt-6 mb-12">
         <div className="flex justify-between items-center mx-4">
           <h2 className="font-bold text-[1.4rem] mb-1">

@@ -49,6 +49,10 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     return signInWithPopup(auth, new GoogleAuthProvider());
   };
 
+  const loginWithGoogleMobile = () => {
+    return signInWithPopup(auth, new GoogleAuthProvider());
+  };
+
   const signup = (email: string, password: string) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -80,18 +84,25 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     signin,
     logout,
     loginWithGoogle,
+    loginWithGoogleMobile,
     forgotPassword,
   };
   return (
     <AuthContext.Provider value={value}>
-      {loading && (
-        <div className="bg-gray-[#f4f4f4] center">
+      {loading ? (
+        <div
+          style={{
+            transform: "translate3d(0,0,200px)",
+          }}
+          className="bg-gray-[#f4f4f4] center"
+        >
           <picture>
             <img src="/RocketLoader.svg" alt="loader" className="w-20 h-20" />
           </picture>
         </div>
+      ) : (
+        <>{children}</>
       )}
-      {children}
     </AuthContext.Provider>
   );
 };
