@@ -12,7 +12,6 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useState } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -32,17 +31,7 @@ interface TrendingChartProps {
 }
 
 const TrendingChart = ({ id, price }: TrendingChartProps) => {
-  const [historicData, setHistoricData] = useState<any[]>();
-
-  const fetchData = async () => {
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`
-    );
-    const data = await res.json();
-    setHistoricData(data.prices);
-  };
-
-  const { data, isLoading, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ["chart", id],
     queryFn: () =>
       fetch(
@@ -52,7 +41,7 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
   });
 
   return (
-    <section className="px-12 max-w-[1400px] mx-auto mb-14 h-[28rem]">
+    <section className="px-4 xs:px-8 sm:px-12 max-w-[1400px] mx-auto mb-14 h-[25rem] xs:h-[28rem]">
       <div className="flex justify-between items-center mx-4">
         <div>
           <h3 className="text-[#67676d]">
@@ -66,7 +55,7 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
       </div>
       <div className="flex justify-center">
         {data && (
-          <div className="w-full h-[25rem]">
+          <div className="w-full h-[22rem] xs:h-[25rem]">
             <Line
               data={{
                 labels: data.prices.map((coin: any) => {
@@ -81,8 +70,6 @@ const TrendingChart = ({ id, price }: TrendingChartProps) => {
                   {
                     label: "",
                     data: data.prices.map((coin: any) => coin[1]),
-                    // borderColor: "#c8bcac",
-                    // borderColor: "#ada293",
                     borderColor: "#8e8a85",
                   },
                 ],

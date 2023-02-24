@@ -1,63 +1,60 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useUserData } from "../../../../contexts/UserDataContext";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { StoreCoin } from "../../../(pages)/favorites/FavoriteCoins";
 import { useCoinsStore } from "../../../../src/CoinsStore";
-import CarouselBtnL from "./CarouselBtnL";
-import CarouselBtnR from "./CarouselBtnR";
+import CarouselBtns from "./CarouselBtns";
 import TrendingChart from "./TrendingChart";
 import TrendingCoin from "./TrendingCoin";
 
 const TrendingCoinsList = () => {
-  const [margin, setMargin] = useState(0);
-  const [left, setLeft] = useState(false);
-  const [right, setRight] = useState(true);
-  const { coins }: any = useUserData();
-  const carousel: any = useRef();
-  const [displayCoin, setDisplayCoin] = useState<any>({
+  const [left, setLeft] = useState(true);
+  const [right, setRight] = useState(false);
+  const [showBtns, setShowBtns] = useState(false);
+  const carousel = useRef<HTMLUListElement>(null);
+  const [displayCoin, setDisplayCoin] = useState({
     coinId: "",
     coinPrice: 0,
   });
 
-  const storeCoins = useCoinsStore.getState().coins;
-
-  const trendingCoins: any =
-    storeCoins.length > 1 &&
-    [...storeCoins]
-      .sort(
-        (a: any, b: any) =>
-          b.price_change_percentage_24h - a.price_change_percentage_24h
-      )
-      .slice(0, 10);
-
   useEffect(() => {
-    const updateSize = () => {
-      window.innerWidth > 1400
-        ? setMargin((window.innerWidth - 1400) / 2 + 48)
-        : setMargin(48);
-    };
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
+    window.scrollTo(0, 0);
   }, []);
 
+  const storeCoins = useCoinsStore.getState().coins;
+
+  const trendingCoins: StoreCoin[] | undefined = useMemo(() => {
+    if (storeCoins.length > 1) {
+      return [...storeCoins]
+        .sort(
+          (a: StoreCoin, b: StoreCoin) =>
+            b.price_change_percentage_24h - a.price_change_percentage_24h
+        )
+        .slice(0, 10);
+    }
+  }, [storeCoins]);
+
   const handleNextClick = () => {
-    carousel.current.scrollBy({ left: 452, behaviour: "smooth" });
+    carousel.current?.scrollBy({ left: 250, behavior: "smooth" });
   };
   const handlePrevClick = () => {
-    carousel.current.scrollBy({ left: -452, behaviour: "smooth" });
+    carousel.current?.scrollBy({ left: -250, behavior: "smooth" });
   };
 
-  const handleButtons = (e: any) => {
-    carousel.current.firstChild.getBoundingClientRect().x - margin < -1
-      ? setLeft(true)
-      : setLeft(false);
-    carousel.current.lastChild.getBoundingClientRect().right -
-      e.target.clientWidth +
-      margin <
-    1
-      ? setRight(false)
-      : setRight(true);
+  const handleBtns = () => {
+    if (carousel?.current?.scrollLeft === 0) {
+      setLeft(true);
+    } else {
+      setLeft(false);
+    }
+    if (
+      carousel.current!.scrollWidth - carousel.current!.scrollLeft ===
+      carousel.current!.clientWidth
+    ) {
+      setRight(true);
+    } else {
+      setRight(false);
+    }
   };
 
   const handleCoinClick = (coinId: string, coinPrice: number) => {
@@ -68,43 +65,43 @@ const TrendingCoinsList = () => {
   };
 
   return (
-    <section className="mt-10">
+    <section className="mt-6 xs:mt-4 sm:mt-8">
       {storeCoins?.length > 1 && (
         <>
           <TrendingChart
             id={displayCoin.coinId || (trendingCoins && trendingCoins[0].id)}
             price={
               displayCoin.coinPrice ||
-              (trendingCoins && trendingCoins[0].current_price)
+              (trendingCoins && trendingCoins[0].current_price)!
             }
           />
-          <div className="relative testing">
-            {left && (
-              <CarouselBtnL handleClick={handlePrevClick} className="left-12" />
-            )}
+          <div
+            onMouseEnter={() => setShowBtns(true)}
+            onMouseLeave={() => setShowBtns(false)}
+            className="h-[247px] relative overflow-hidden"
+          >
             <ul
               ref={carousel}
-              onScroll={(e) => handleButtons(e)}
-              className="flex h-[250px] overflow-x-auto space-x-4 idk scroll-smooth"
+              onScroll={handleBtns}
+              className="flex h-[280px] pb-10 pl-4 xs:pl-8 sm:pl-10 overflow-x-auto"
             >
-              {trendingCoins.map((coin: any, i: any) => (
+              {trendingCoins?.map((coin) => (
                 <TrendingCoin
-                  key={coin.name}
-                  i={i}
-                  id={coin.id}
-                  margin={margin}
-                  name={coin.name}
-                  image={coin.image}
-                  current_price={coin.current_price}
-                  price_change_percentage_24h={coin.price_change_percentage_24h}
+                  key={coin.id}
+                  coin={coin}
                   handleCoinClick={handleCoinClick}
                 />
               ))}
+              <li className="shrink-0">
+                <div className="slide-center h-full w-[4px] xs:w-[20px] sm:w-[28px] relative"></div>
+              </li>
             </ul>
-            {right && (
-              <CarouselBtnR
-                handleClick={handleNextClick}
-                className="right-12"
+            {showBtns && (
+              <CarouselBtns
+                left={left}
+                right={right}
+                handleNextClick={handleNextClick}
+                handlePrevClick={handlePrevClick}
               />
             )}
           </div>
