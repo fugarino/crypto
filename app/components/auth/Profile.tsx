@@ -5,7 +5,7 @@ import SignInBtn from "../navigation/header/SignInBtn";
 import UserBtns from "../navigation/header/UserBtns";
 
 const Profile = () => {
-  const { currentUser }: any = useAuth();
+  const { currentUser } = useAuth();
 
   return (
     <div className="flex items-center justify-between">

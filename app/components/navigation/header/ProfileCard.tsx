@@ -8,41 +8,26 @@ import { db } from "../../../../firebase";
 import ProfileEditForm from "./ProfileEditForm";
 
 const ProfileCard = () => {
-  const { currentUser, logout }: any = useAuth();
+  const { currentUser, logout } = useAuth();
   const [editProfile, setEditProfile] = useState(false);
   const [currentImage, setCurrentImage] = useState("");
   const [currentUserDisplayName, setCurrentUserDisplayName] = useState("");
 
   useEffect(() => {
-    const coinRef = doc(db, "users", currentUser.uid);
+    if (currentUser) {
+      const userRef = doc(db, "users", currentUser.uid);
 
-    const unsubscribe = onSnapshot(coinRef, (coin) => {
-      if (coin.exists()) {
-        setCurrentUserDisplayName(coin.data().displayName);
-      } else {
-        console.log("No items in watchlist");
-      }
-    });
+      const unsubscribe = onSnapshot(userRef, (user) => {
+        if (user.exists()) {
+          setCurrentUserDisplayName(user.data().displayName);
+          setCurrentImage(user.data().currentPhotoURL);
+        }
+      });
 
-    return () => {
-      unsubscribe();
-    };
-  }, [currentUser]);
-
-  useEffect(() => {
-    const coinRef = doc(db, "users", currentUser.uid);
-
-    const unsubscribe = onSnapshot(coinRef, (coin) => {
-      if (coin.exists()) {
-        setCurrentImage(coin.data().currentPhotoURL);
-      } else {
-        console.log("No items in watchlist");
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
+      return () => {
+        unsubscribe();
+      };
+    }
   }, [currentUser]);
 
   return (
@@ -50,13 +35,7 @@ const ProfileCard = () => {
       <div className="relative h-20 bg-slate-300">
         <picture>
           <img
-            src={
-              currentImage
-                ? currentImage
-                : currentUser.photoURL
-                ? currentUser.photoURL
-                : "/Untitled (5).svg"
-            }
+            src={currentImage ? currentImage : "/Untitled (5).svg"}
             alt="profile picture"
             referrerPolicy="no-referrer"
             className={`relative -bottom-[30px] ${
@@ -90,9 +69,9 @@ const ProfileCard = () => {
             </button>
             <div className="flex flex-col items-center justify-center">
               <h1 className="font-semibold text-lg mt-1">
-                {currentUserDisplayName}
+                {currentUserDisplayName || currentUser?.displayName}
               </h1>
-              <p className="text-gray-600">{currentUser.email}</p>
+              <p className="text-gray-600">{currentUser?.email}</p>
             </div>
             <div className="flex justify-between mt-4">
               <div></div>

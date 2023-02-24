@@ -1,6 +1,6 @@
 "use client";
 
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { db } from "../../../../firebase";
@@ -10,24 +10,25 @@ const ProfileButton = () => {
   const [darkProfileBorder, setDarkProfileBorder] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [currentProfilePicture, setCurrentProfilePicture] = useState("");
-  const { currentUser }: any = useAuth();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    const coinRef = doc(db, "users", currentUser.uid);
+    if (currentUser) {
+      const coinRef = doc(db, "users", currentUser.uid);
 
-    const unsubscribe = onSnapshot(coinRef, (coin) => {
-      if (coin.exists()) {
-        setCurrentProfilePicture(coin.data().currentPhotoURL);
-      } else {
-        console.log("No items in watchlist");
-      }
-    });
+      const unsubscribe = onSnapshot(coinRef, (coin) => {
+        if (coin.exists()) {
+          setCurrentProfilePicture(coin.data().currentPhotoURL);
+        } else {
+          console.log("No items in watchlist");
+        }
+      });
 
-    return () => {
-      unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [currentUser]);
 
   const onProfileMouseEnter = () => {
     setDarkProfileBorder(true);
@@ -39,9 +40,16 @@ const ProfileButton = () => {
     }
   };
 
-  const onProfileClick = () => {
-    setShowProfile(!showProfile);
-    !showProfile ? setDarkProfileBorder(true) : setDarkProfileBorder(false);
+  const onProfileClick = async () => {
+    if (currentUser) {
+      setShowProfile(!showProfile);
+      !showProfile ? setDarkProfileBorder(true) : setDarkProfileBorder(false);
+      if (currentUser.emailVerified) return;
+      const docRef = doc(db, "users", currentUser.uid);
+      await updateDoc(docRef, {
+        displayName: currentUser.displayName,
+      });
+    }
   };
 
   return (
@@ -59,8 +67,6 @@ const ProfileButton = () => {
             src={
               currentProfilePicture
                 ? currentProfilePicture
-                : currentUser.photoURL
-                ? currentUser.photoURL
                 : "/Untitled (5).svg"
             }
             alt="profile"

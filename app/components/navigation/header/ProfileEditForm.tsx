@@ -7,34 +7,18 @@ import { db, storage } from "../../../../firebase";
 import LightInputField from "../../auth/forms/LightInputField";
 
 interface IProfileEditForm {
-  // eslint-disable-next-line
-  setEditProfile: (arg0: boolean) => void;
+  setEditProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
-  const { currentUser }: any = useAuth();
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [error, setError] = useState("");
 
-  const [updatedDisplayName, setUpdatedDisplayName] = useState(
-    currentUser.displayName
-  );
-
-  // const updatePhotoURL = async (profilePhoto: string) => {
-  //   try {
-  //     const docRef = doc(db, "users", currentUser.uid);
-  //     await updateDoc(
-  //       docRef,
-  //       {
-  //         photoURL: profilePhoto,
-  //       },
-  //       { merge: true }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const [updatedDisplayName, setUpdatedDisplayName] = useState<
+    string | undefined
+  >(currentUser?.displayName);
 
   const upload = async (file: any, currentUser: any) => {
     const fileRef = ref(storage, currentUser.uid);
@@ -55,7 +39,7 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
         }
       });
     });
-    const photoURL: any = await getDownloadURL(fileRef);
+    const photoURL = await getDownloadURL(fileRef);
     updateProfile(currentUser, { photoURL: photoURL });
   };
 
@@ -68,30 +52,25 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
   const handleProfileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (profilePhoto || updatedDisplayName !== currentUser.displayName) {
+      if (profilePhoto || updatedDisplayName !== currentUser?.displayName) {
         if (profilePhoto) {
           await upload(profilePhoto, currentUser);
-          // await updatePhotoURL(profilePhoto);
         }
-        if (updatedDisplayName !== currentUser.displayName) {
-          await updateProfile(currentUser, {
+        if (updatedDisplayName !== currentUser?.displayName) {
+          await updateProfile(currentUser as any, {
             displayName: updatedDisplayName,
           });
-          await updateDoc(doc(db, "users", currentUser.uid), {
+          await updateDoc(doc(db, "users", currentUser!.uid), {
             displayName: updatedDisplayName,
           });
         }
         setEditProfile(false);
-        // window.location.reload();
       } else {
         setEditProfile(false);
       }
     } catch {
       setError("Unable to update profile");
     }
-    // if (profilePhoto) {
-    //   window.location.reload();
-    // }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,8 +93,8 @@ const ProfileEditForm = ({ setEditProfile }: IProfileEditForm) => {
         type="text"
         name="displayName"
         placeholder="display name..."
-        value={updatedDisplayName}
-        defaultValue={currentUser.displayName}
+        value={updatedDisplayName!}
+        defaultValue={currentUser?.displayName}
         onChange={handleInputChange}
       />
       <div className="relative -top-2 flex flex-col transition-all duration-150 ease-out mb-2">
