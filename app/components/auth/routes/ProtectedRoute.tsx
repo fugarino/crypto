@@ -9,12 +9,12 @@ interface IProps {
 }
 
 const ProtectedRoute = ({ children }: IProps) => {
-  const { currentUser }: any = useAuth();
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (currentUser && currentUser.emailVerified) {
+    if (currentUser) {
       setLoading(true);
       router.push("/");
     } else {

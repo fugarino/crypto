@@ -1,11 +1,10 @@
 "use client";
 
-import { sendEmailVerification } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
-import { auth } from "../../../../firebase";
 import AuthProviderButton from "../AuthProviderButton";
 import GoogleIcon from "../GoogleIcon";
 import FormLayout from "./FormLayout";
@@ -35,10 +34,12 @@ const SignUpForm = () => {
     setError("");
     setLoading(true);
     try {
-      await signup(signUpForm.email, signUpForm.password);
-      router.push(`/email/verify?email=${signUpForm.email}`);
-      await sendEmailVerification(auth.currentUser, {
-        url: "http://localhost:3000",
+      const { user } = await signup(signUpForm.email, signUpForm.password);
+      await updateProfile(user, {
+        displayName: user.email
+          .slice(0, user.email.indexOf("@"))
+          .replace(/[^a-zA-Z0-9 ]/g, "")
+          .slice(0, 9),
       });
     } catch {
       setError("Unable to signup");
