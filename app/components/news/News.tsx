@@ -13,7 +13,7 @@ interface INewsArticleProps {
 // const getData = async () => {
 //   const res = await fetch(
 //     `http://api.mediastack.com/v1/news?access_key=${process.env.MEDIASTACK_API_KEY}&keywords=crypto&limit=5&sort=published_desc`,
-//     { next: { revalidate: 30 } }
+//     { next: { revalidate: 10 * (60 * 1000) } }
 //   );
 //   return res.json();
 // };
@@ -70,23 +70,27 @@ const dummyData: INewsArticleProps[] = [
   },
 ];
 
-const News = () => {
+const News = async () => {
   // const { data } = await getData();
-  // console.log(data);
+
   return (
-    <section className={`${styles.container} px-12`}>
-      {dummyData.map((article) => (
-        <NewsArticle
-          key={article.title}
-          url={article.url}
-          title={article.title}
-          source={article.source}
-          published_at={article.published_at}
-          description={article.description}
-          author={article.author}
-        />
-      ))}
-    </section>
+    <div className="h-[30.5rem] sm:h-[55.5rem] lg1:h-[40.5rem] overflow-hidden">
+      <section
+        className={`${styles.container} px-4 xs:px-8 sm:px-10 pb-10 pt-[2px] snap-x snap-mandatory`}
+      >
+        {dummyData.map((article: INewsArticleProps) => (
+          <NewsArticle
+            key={article.title}
+            url={article.url}
+            title={article.title}
+            source={article.source}
+            published_at={article.published_at}
+            description={article.description}
+            author={article.author}
+          />
+        ))}
+      </section>
+    </div>
   );
 };
 
