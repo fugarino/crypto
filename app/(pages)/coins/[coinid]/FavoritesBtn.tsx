@@ -6,36 +6,42 @@ import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
 
 const FavoritesBtn = ({ coin }: any) => {
-  const { currentUser }: any = useAuth();
-  const { favoriteCoins }: any = useUserData();
+  const { currentUser } = useAuth();
+  const { favoriteCoins } = useUserData();
 
   const inFavorites = favoriteCoins && favoriteCoins.includes(coin?.id);
 
   const addToFavorites = async () => {
-    const coinRef = doc(db, "users", currentUser.uid);
-    try {
-      await setDoc(
-        coinRef,
-        {
-          favoriteCoins: favoriteCoins
-            ? [...favoriteCoins, coin?.id]
-            : [coin?.id],
-        },
-        { merge: true }
-      );
-    } catch (error) {
-      console.log(error);
+    if (currentUser) {
+      const coinRef = doc(db, "users", currentUser.uid);
+      try {
+        await setDoc(
+          coinRef,
+          {
+            favoriteCoins: favoriteCoins
+              ? [...favoriteCoins, coin?.id]
+              : [coin?.id],
+          },
+          { merge: true }
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const removeFromFavorites = async () => {
-    const coinRef = doc(db, "users", currentUser.uid);
-    try {
-      await updateDoc(coinRef, {
-        favoriteCoins: favoriteCoins.filter((watch: any) => watch !== coin?.id),
-      });
-    } catch (error) {
-      console.log(error);
+    if (currentUser) {
+      const coinRef = doc(db, "users", currentUser.uid);
+      try {
+        await updateDoc(coinRef, {
+          favoriteCoins: favoriteCoins.filter(
+            (watch: any) => watch !== coin?.id
+          ),
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
