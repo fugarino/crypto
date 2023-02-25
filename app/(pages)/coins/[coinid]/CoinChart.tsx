@@ -39,7 +39,7 @@ const CoinChart = ({ id }: any) => {
   });
 
   return (
-    <div className="h-full">
+    <section className="h-full">
       <div className="h-[93%]">
         {data && (
           <div className="h-full">
@@ -79,23 +79,9 @@ const CoinChart = ({ id }: any) => {
                 scales: {
                   y: {
                     display: false,
-                    //   ticks: {
-                    //     color: "#6e97a1",
-                    //   },
-                    //   grid: {
-                    //     color: "white",
-                    //     display: false,
-                    //   },
                   },
                   x: {
                     display: false,
-                    //   ticks: {
-                    //     color: "#742f2f",
-                    //   },
-                    //   grid: {
-                    //     // color: "red",
-                    //     display: false,
-                    //   },
                   },
                 },
               }}
@@ -103,35 +89,43 @@ const CoinChart = ({ id }: any) => {
           </div>
         )}
       </div>
-      <div className="h-[7%] w-full">
+      <div className="h-[10%] mt-2 md:mt-0 md:h-[7%] w-full">
         <div className="flex justify-between h-full">
           <button
-            className={`px-10 ${days === 1 && "bg-[#e0dddb]"} rounded-[4px]`}
+            className={`px-0 w-[25%] lg:px-10 ${
+              days === 1 && "bg-[#e0dddb]"
+            } rounded-[4px]`}
             onClick={() => setDays(1)}
           >
             24h
           </button>
           <button
-            className={`px-10 ${days === 5 && "bg-[#e0dddb]"} rounded-[4px]`}
+            className={`px-0 w-[25%] lg:px-10 ${
+              days === 5 && "bg-[#e0dddb]"
+            } rounded-[4px]`}
             onClick={() => setDays(5)}
           >
             5d
           </button>
           <button
-            className={`px-10 ${days === 30 && "bg-[#e0dddb]"} rounded-[4px]`}
+            className={`px-0 w-[25%] lg:px-10 ${
+              days === 30 && "bg-[#e0dddb]"
+            } rounded-[4px]`}
             onClick={() => setDays(30)}
           >
             30d
           </button>
           <button
-            className={`px-10 ${days === 365 && "bg-[#e0dddb]"} rounded-[4px]`}
+            className={`px-0 w-[25%] lg:px-10 ${
+              days === 365 && "bg-[#e0dddb]"
+            } rounded-[4px]`}
             onClick={() => setDays(365)}
           >
             1y
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

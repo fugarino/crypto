@@ -62,44 +62,58 @@ const CoinInfo = ({ id }: CoinInfoProps) => {
     },
   };
 
-  const toMillions = (num) => {
-    return num.toString().slice(0, -6) + "M";
-  };
-
   return (
-    <div className="relative p-10 h-full">
+    <section className="relative p-6 xs:p-10 h-full">
       <FavoritesBtn coin={coinInfo} />
       {coinInfo && (
-        <div className="flex flex-col justify-between h-full">
+        <main className="flex flex-col justify-between h-full">
           <div className="flex justify-between">
-            <div className="font-bold text-[3rem] text-[#989898] leading-[2.5rem]">
-              Rank: {coinInfo.market_cap_rank}
+            <div className="flex flex-col font-bold text-[3.5rem] text-[#989898] xs:text-[5rem]">
+              <h3 className="flex space-x-2 md:space-x-0 lg:space-x-2">
+                <span className="text-[0.9rem] md:hidden lg:flex">Rank:</span>
+                <span className="leading-[3.1rem]">
+                  {coinInfo.market_cap_rank < 10
+                    ? "0" + coinInfo.market_cap_rank
+                    : coinInfo.market_cap_rank}
+                </span>
+              </h3>
             </div>
             <div>
               <div className="flex justify-between">
                 <div></div>
-                <div className="font-bold text-[2rem] leading-[1.7rem]">
-                  ${coinInfo.market_data.current_price["usd"]}
+                <div className="font-bold text-[1.5rem] ml-2 xs:text-[2rem] leading-[1.8rem] xs:leading-[2rem] w-full break-words">
+                  $
+                  {coinInfo.market_data.current_price["usd"]
+                    .toString()
+                    .slice(0, 8)}
                 </div>
               </div>
               <div className="flex justify-between font-medium text-sm">
                 <div></div>
-                <div>
-                  <span className="text-[#989898]">Market Cap: </span>
-                  {toMillions(coinInfo.market_data.market_cap["usd"])}
-                </div>
+                <span
+                  className={`${
+                    coinInfo.market_data.price_change_percentage_24h < 0
+                      ? "text-red-700"
+                      : "text-green-700"
+                  } text-[0.9rem]`}
+                >
+                  {coinInfo.market_data.price_change_percentage_24h > 0
+                    ? "+" + coinInfo.market_data.price_change_percentage_24h
+                    : coinInfo.market_data.price_change_percentage_24h}
+                  %
+                </span>
               </div>
             </div>
           </div>
-          <div className="flex justify-center w-full h-[15rem]">
+          <div className="flex justify-center items-center w-full px-6 xs:px-0 h-[15rem] my-6 mt-10 xs:mt-10 xs:my-10 md:my-0">
             <Doughnut data={data} options={options} />
           </div>
-          <div className={`font-bold text-sm ${styles.textCutoff}`}>
+          <p className={`font-bold text-sm ${styles.textCutoff}`}>
             {ReactHtmlParser(coinInfo.description.en)}
-          </div>
-        </div>
+          </p>
+        </main>
       )}
-    </div>
+    </section>
   );
 };
 
