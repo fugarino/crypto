@@ -26,9 +26,13 @@ interface IAuthContext {
   currentUser:
     | {
         uid: string;
+        photoURL: string;
+        email: string;
+        displayName: string;
+        emailVerified: boolean;
       }
     | undefined;
-  signup: (email: string, password: string) => Promise<{}>;
+  signup: (email: string, password: string) => void;
   signin: (email: string, password: string) => Promise<{}>;
   logout: () => void;
   loginWithGoogle: () => Promise<{}>;
@@ -46,10 +50,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   const loginWithGoogle = () => {
-    return signInWithPopup(auth, new GoogleAuthProvider());
-  };
-
-  const loginWithGoogleMobile = () => {
     return signInWithPopup(auth, new GoogleAuthProvider());
   };
 
@@ -84,7 +84,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     signin,
     logout,
     loginWithGoogle,
-    loginWithGoogleMobile,
     forgotPassword,
   };
   return (

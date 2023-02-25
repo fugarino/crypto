@@ -22,8 +22,8 @@ interface IUserData {
   setNotifications: React.Dispatch<
     React.SetStateAction<{ id: string; data: any }[]>
   >;
-  handleNotificationClick: boolean;
-  setHandleNotificationClick: React.Dispatch<React.SetStateAction<boolean>>;
+  handleNotificationClick: string;
+  setHandleNotificationClick: React.Dispatch<React.SetStateAction<string>>;
   trendingComment: string;
   setTrendingComment: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -39,7 +39,7 @@ export const UserDataProvider = ({ children }: ProviderProps) => {
   const [notifications, setNotifications] = useState<
     { id: string; data: any }[]
   >([]);
-  const [handleNotificationClick, setHandleNotificationClick] = useState(false);
+  const [handleNotificationClick, setHandleNotificationClick] = useState("");
   const [trendingComment, setTrendingComment] = useState("");
   const { currentUser } = useAuth();
 
@@ -50,8 +50,6 @@ export const UserDataProvider = ({ children }: ProviderProps) => {
       const unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
           setFavoriteCoins(coin.data().favoriteCoins);
-        } else {
-          console.log("No items in watchlist");
         }
       });
 
