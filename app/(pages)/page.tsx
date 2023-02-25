@@ -1,34 +1,24 @@
 import { Suspense } from "react";
 import TrendingCoinsList from "../components/coins/trending/TrendingCoinsList";
+import Featured from "../components/featured/Featured";
 import News from "../components/news/News";
-import Testing from "../components/Testing";
 import "./globals.css";
 
 const HomePage = () => {
   return (
-    <div className="w-full h-full">
-      <header className="px-14 max-w-[1400px] mx-auto mt-1">
+    <div className="w-full h-full overflow-x-hidden">
+      <header className="px-4 xs:px-8 sm:px-14 max-w-[1400px] mx-auto mt-1">
         <h1 className="font-bold text-[1.5rem] ml-4">Discover</h1>
         <h2 className="relative -top-2 text-[#67676d] ml-4">
           latest trends and developments
         </h2>
       </header>
       <Suspense fallback={<p>Loading news...</p>}>
+        {/* @ts-ignore */}
         <News />
       </Suspense>
       <TrendingCoinsList />
-      <div className="px-12 max-w-[1400px] mx-auto mt-6 mb-12">
-        <div className="flex justify-between items-center mx-4">
-          <h2 className="font-bold text-[1.4rem] mb-1">
-            <span className="text-[#67676d]">Stay</span>
-            <span className="ml-[5px]">Connected</span>
-          </h2>
-          <aside className="text-[#67676d] text-[0.9rem]">
-            Featured <span className="font-bold">24h</span>
-          </aside>
-        </div>
-        <Testing />
-      </div>
+      <Featured />
     </div>
   );
 };
