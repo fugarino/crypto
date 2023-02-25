@@ -64,10 +64,10 @@ const NotificationDropdown = ({ setShowDropdown }: IProfileDropDown) => {
   return (
     <div
       ref={ref}
-      className="absolute z-10 flex flex-col top-[55px] -right-2 xs:right-0 w-[calc(100vw-2rem)] xs:w-[calc(100vw-4rem)] sm:right-[50px]
+      className="absolute z-20 flex flex-col top-[55px] -right-2 xs:right-0 w-[calc(100vw-2rem)] xs:w-[calc(100vw-4rem)] sm:right-[50px]
        bg-white p-[4px] sm:w-[23rem] h-[22rem] shadowProfile rounded-md overflow-hidden"
     >
-      <div className="overflow-y-scroll idkk p-4">
+      <div className="overflow-y-scroll p-4 notificationScrollbar">
         <h1 className="font-semibold text-[1.1rem]">Notifications</h1>
         {notifications.length < 1 && (
           <div className="h-[16rem] flex flex-col items-center justify-center">
