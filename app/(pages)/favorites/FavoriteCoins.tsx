@@ -47,14 +47,16 @@ const FavoriteCoins = () => {
 
   return (
     <section>
-      <span className="inline-block text-red-400 text-[0.9rem]">{error}</span>
+      {error && (
+        <span className="inline-block text-red-400 text-[0.9rem]">{error}</span>
+      )}
       {currentUser ? (
         <div>
           <EditBtn edit={edit} setEdit={setEdit} />
-          {storeCoins && (
+          {storeCoins.length > 0 && storeCoins && (
             <div>
               <ul className="grid gird-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg1:grid-cols-5 gap-y-1 xs:gap-y-2 sm:gap-y-3 gap-x-4 mb-6">
-                {storeCoins.map((coin: StoreCoin) => {
+                {storeCoins?.map((coin: StoreCoin) => {
                   if (favoriteCoins && favoriteCoins.includes(coin.id)) {
                     return (
                       <FavoriteCoin

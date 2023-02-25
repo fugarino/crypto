@@ -12,15 +12,19 @@ const FavoriteCoin = ({
 }) => {
   const router = useRouter();
 
+  const isMobile = window.innerWidth < 480 && edit;
+
   return (
     <li
       key={coin.name}
+      style={{
+        border: isMobile ? "2px solid #d2a0a0" : "",
+        backgroundColor: isMobile ? "#f2e5e5" : "",
+      }}
       className={`relative bg-white flex flex-col justify-between h-[225px] rounded-lg shadow-md
-                    shrink-0 mt-[2px] mb-2 p-6 cursor-pointer hover:outline hover:outline-[2px] ${
-                      !edit
-                        ? "outline-[#dedede] hover:outline-[#dedede] hover:bg-[#f9f9f9]"
-                        : "outline-[#d2a0a0] hover:outline-[#d2a0a0] hover:bg-[#f2e5e5]"
-                    }
+                    shrink-0 mt-[2px] mb-2 p-6 cursor-pointer
+                    border-[2px] border-white transition-colors duration-150 ease-out
+                     ${!edit ? "cardHover" : "cardHoverRed"}
                     transition-colors duration-150 ease-out`}
       onClick={() =>
         !edit ? router.push(`/coins/${coin.id}`) : removeFromFavorites(coin)
