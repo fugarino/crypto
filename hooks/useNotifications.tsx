@@ -7,21 +7,28 @@ import { db } from "../firebase";
 const useNotifications = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotificationSymbol, setShowNotificationSymbol] = useState(false);
-  const { notifications }: any = useUserData();
-  const { currentUser }: any = useAuth();
+  const { notifications } = useUserData();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    const getData = async () => {
-      const docRef = collection(db, "users", currentUser.uid, "notifications");
-      const docSnap = await getDocs(docRef);
+    if (currentUser) {
+      const getData = async () => {
+        const docRef = collection(
+          db,
+          "users",
+          currentUser.uid,
+          "notifications"
+        );
+        const docSnap = await getDocs(docRef);
 
-      const isNewNotification = docSnap.docs.some(
-        (doc) => doc.data().read === false
-      );
-      setShowNotificationSymbol(isNewNotification);
-    };
-    getData();
-  }, [notifications, currentUser.uid]);
+        const isNewNotification = docSnap.docs.some(
+          (doc) => doc.data().read === false
+        );
+        setShowNotificationSymbol(isNewNotification);
+      };
+      getData();
+    }
+  }, [notifications, currentUser]);
 
   return {
     showNotificationSymbol,

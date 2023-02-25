@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <nav className="max-w-[1400px] mx-auto">
-      <div className="flex items-center justify-between px-8 sm:px-12 h-20">
+      <div className="flex items-center justify-between px-6 xs:px-8 sm:px-12 h-20">
         <div className="sm:hidden">
           <ToggleMenu
             isMenuOpen={isMenuOpen}
