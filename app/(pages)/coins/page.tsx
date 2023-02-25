@@ -4,8 +4,8 @@ import SectionCoins from "./SectionCoins";
 
 const CoinsPage = () => {
   return (
-    <div className="w-full h-full pb-10">
-      <header className="px-8 sm:px-14 max-w-[1400px] mx-auto mt-1">
+    <div className="w-full h-full xs:pb-10">
+      <header className="px-4 xs:px-8 sm:px-14 max-w-[1400px] mx-auto mt-1">
         <h1 className="font-bold text-[1.5rem] ml-4">Featured</h1>
         <h2 className="relative -top-2 text-[#67676d] ml-4">
           coins and discussions
