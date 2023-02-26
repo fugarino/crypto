@@ -1,53 +1,28 @@
 "use client";
 
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  serverTimestamp,
-} from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useUserData } from "../../../../contexts/UserDataContext";
 import { db } from "../../../../firebase";
+import sortTime from "../../../../util/sortTime";
 import Comment from "./Comment";
+import CommentsForm from "./CommentsForm";
+import CommentsHeader from "./CommentsHeader";
 
-const Comments = ({ coinid }: any) => {
-  const [commentInput, setCommentInput] = useState("");
+const Comments = ({ coinid }: { coinid: string }) => {
   const [comments, setComments] = useState<any[]>([]);
-  const [showCommentInput, setShowCommentInput] = useState(false);
-  const [currentValue, setCurrentValue] = useState("");
-  const [sortBy, setSortBy] = useState("latest");
-  const [currentLength, setCurrentLength] = useState(0);
-  const { trendingComment, setTrendingComment }: any = useUserData();
-  // const [nestedComments, setNestedComments] = useState<any[]>([]);
-  // const [test, setTest] = useState(false);
-  const { currentUser }: any = useAuth();
-  const textareaRef = useRef<any>(null);
-  const commentRef = useRef<any>();
+  const [sortBy, setSortBy] = useState("top");
 
-  useEffect(() => {
-    if (comments.length > 0 && trendingComment !== "") {
-      const comments = commentRef?.current?.children;
-      for (let i = 0; i < comments.length; i++) {
-        if (comments[i].id === trendingComment) {
-          comments[i].scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          comments[i].classList.add("hioo");
-          const timer = setTimeout(() => {
-            comments[i].classList.remove("hioo");
-            setTrendingComment("");
-          }, 2000);
-          return () => {
-            clearTimeout(timer);
-          };
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trendingComment, comments]);
+  const [commentInput, setCommentInput] = useState("");
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const { trendingComment, setTrendingComment } = useUserData();
+  const { currentUser } = useAuth();
+  const commentRef = useRef<HTMLUListElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -56,129 +31,98 @@ const Comments = ({ coinid }: any) => {
         setComments(
           snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
         );
+        setLoading(false);
       }
     );
-
     return () => {
       unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [coinid]);
 
   useEffect(() => {
-    if (showCommentInput) {
-      textareaRef.current.style.height = "0px";
-      const scrollHeight = textareaRef.current.scrollHeight;
-      textareaRef.current.style.height = scrollHeight + "px";
+    if (comments.length > 0 && trendingComment !== "") {
+      const comments = commentRef?.current?.children;
+      for (let i = 0; i < comments!.length; i++) {
+        if (comments![i].id === trendingComment) {
+          comments![i].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+          comments![i].classList.add("notification-highlight");
+          const timer = setTimeout(() => {
+            comments![i].classList.remove("notification-highlight");
+            setTrendingComment("");
+          }, 2000);
+          return () => {
+            clearTimeout(timer);
+          };
+        }
+      }
     }
-  }, [currentValue, showCommentInput]);
+  }, [trendingComment, setTrendingComment, comments]);
 
-  const handleLength = (e: any) => {
-    setCurrentLength(e.target.value.length);
-  };
+  const sortedComments = useMemo(() => {
+    return [...comments].sort((a, b) =>
+      sortBy === "latest" ? sortTime(a, b) : b.data.upvotes - a.data.upvotes
+    );
+  }, [comments, sortBy]);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!commentInput) return;
-    try {
-      await addDoc(collection(db, "comments", coinid, "messages"), {
-        comment: commentInput,
-        userId: currentUser?.uid,
-        displayName: currentUser?.displayName,
-        timestamp: serverTimestamp(),
-        upvotes: 0,
+  const showInput = async () => {
+    if (!currentUser) {
+      router.push("/signin");
+    } else {
+      setShowCommentInput(true);
+      if (currentUser.emailVerified) return;
+      const docRef = doc(db, "users", currentUser.uid);
+      await updateDoc(docRef, {
+        displayName: currentUser.displayName,
       });
-      setShowCommentInput(false);
-    } catch (error) {
-      console.log(error);
     }
-    setCommentInput("");
   };
 
   return (
-    <section className="my-10">
-      <div className="flex items-center justify-between px-4">
-        <h3 className="font-bold text-[1.4rem]">Comments</h3>
-        <div className="flex relative top-[2px]">
-          <span className="text-[#75757B]">
-            How are you feeling about{" "}
-            <span className="font-bold">{coinid}</span> today?
-          </span>
-          <button
-            className="ml-4 font-bold"
-            onClick={() => setShowCommentInput(true)}
-          >
-            add a comment
-          </button>
-          <select
-            name="sort"
-            id="sort-comments"
-            className="ml-12 font-medium bg-inherit outline-none cursor-pointer"
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="latest">latest</option>
-            <option value="top">top</option>
-          </select>
-        </div>
-      </div>
-      <div className="bg-white min-h-[30rem] mt-1 rounded-lg shadow-md">
+    <section className="mb-4 xs:my-10 mt-14 md:mt-10">
+      <CommentsHeader
+        coinid={coinid}
+        showInput={showInput}
+        setSortBy={setSortBy}
+        showCommentInput={showCommentInput}
+        setShowCommentInput={setShowCommentInput}
+      />
+      <div className="bg-white overflow-hidden min-h-[20rem] xs:min-h-[30rem] mt-1 rounded-lg shadow-md">
         {showCommentInput && (
-          <div className="flex justify-between p-10 pb-0">
-            <form
-              onSubmit={(e) => handleSubmit(e)}
-              className="border-2 rounded-lg border-[#ECECEC] w-[87%]"
-            >
-              <textarea
-                placeholder="add comment here..."
-                ref={textareaRef}
-                onChange={(e) => {
-                  setCommentInput(e.target.value);
-                  setCurrentValue(e.target.value);
-                  handleLength(e);
-                }}
-                className="w-full h-auto resize-none outline-none py-[25px] px-8 rounded-xl"
-              ></textarea>
-              <div className="flex items-center justify-between mb-3 mx-8">
-                <span className="text-[0.9rem]">{`max: ${currentLength}/240`}</span>
-                <button
-                  type="submit"
-                  className="bg-black px-6 py-2 rounded-md text-white"
-                >
-                  comment
-                </button>
-              </div>
-            </form>
-            <button
-              className="flex font-bold"
-              onClick={() => setShowCommentInput(false)}
-            >
-              cancel
-            </button>
-          </div>
+          <CommentsForm
+            coinid={coinid}
+            setSortBy={setSortBy}
+            commentInput={commentInput}
+            setCommentInput={setCommentInput}
+            showCommentInput={showCommentInput}
+            setShowCommentInput={setShowCommentInput}
+          />
         )}
-        <ul ref={commentRef} style={{ listStyle: "none" }} className="py-10">
-          {comments.length > 0 &&
-            comments
-              .sort((a: any, b: any) => {
-                if (sortBy === "latest") {
-                  const currentDate: any = new Date();
-                  try {
-                    const firstCommentDate: any = a?.data.timestamp.toDate();
-                    const secondCommentDate: any = b?.data.timestamp.toDate();
-                    const firstTimeDifference = currentDate - firstCommentDate;
-                    const secondTimeDifference =
-                      currentDate - secondCommentDate;
-                    return firstTimeDifference - secondTimeDifference;
-                  } catch (error) {
-                    return 0 - 0;
-                  }
-                } else {
-                  return b?.data.upvotes - a?.data.upvotes;
-                }
-              })
-              .map((comment) => (
-                <Comment key={comment.id} comment={comment} coinid={coinid} />
-              ))}
+        <ul
+          ref={commentRef}
+          style={{ listStyle: "none" }}
+          className="md:p-4 md:py-6"
+        >
+          {!loading && (
+            <>
+              {comments.length > 0 ? (
+                sortedComments.map((comment) => (
+                  <Comment key={comment.id} comment={comment} coinid={coinid} />
+                ))
+              ) : (
+                <div className="w-full h-[20rem] xs:h-[30rem] flex flex-col justify-center items-center">
+                  <h3 className="font-semibold text-[1.3rem] xs:text-[1.5rem] leading-[18px] xs:leading-5">
+                    No comments yet.
+                  </h3>
+                  <p className="font-light text-[0.9rem] xs:text-[1rem]">
+                    Be the first to comment.
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </ul>
       </div>
     </section>
