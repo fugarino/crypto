@@ -28,7 +28,7 @@ const NewsLetter = () => {
         className="relative rounded-lg h-[14rem] xs:h-[16rem] shadow-md overflow-hidden object-cover
       flex items-center xs:items-end lg:items-center justify-center xs:justify-start"
       >
-        <div className="relative z-10 top-6 xs:top-0 m-4 lg:w-[35%] lg:flex lg:flex-col lg:items-center">
+        <div className="relative z-[9] top-6 xs:top-0 m-4 lg:w-[35%] lg:flex lg:flex-col lg:items-center">
           <h2 className="text-white font-semibold text-[1.75rem] leading-[1rem]">
             Subscribe to the <span className="gradientText">aiirlabs</span>
           </h2>

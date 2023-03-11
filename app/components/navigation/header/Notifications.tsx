@@ -10,7 +10,7 @@ const Notifications = () => {
     <div>
       {showNotificationSymbol && (
         <div
-          className="absolute z-10 left-[10px] top-[12px] border-2
+          className="absolute z-[9] left-[10px] top-[12px] border-2
          border-[#edebe9] w-3 h-3 pointer-events-none rounded-full bg-red-400"
         />
       )}
