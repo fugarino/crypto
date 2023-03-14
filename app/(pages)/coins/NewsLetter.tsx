@@ -74,7 +74,7 @@ const NewsLetter = () => {
         </div>
         <Image
           priority
-          src="/Untitled design (8).png"
+          src="/Untitled design (8) (1).webp"
           width={1920}
           height={1334}
           alt="community"
